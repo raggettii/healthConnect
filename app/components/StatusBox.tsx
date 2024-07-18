@@ -23,7 +23,7 @@ export default function StatusBox({ status }: { status: string }) {
           width={10}
           alt="status-icon"
         />
-        {status}
+        <div className="hidden md:block">{status}</div>
       </div>
     </>
   );

@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-      <div>Hello from Home Page</div>
+      <div className="flex h-screen">Hello from Home Page</div>
     </>
   );
 }
