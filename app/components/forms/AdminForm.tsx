@@ -3,6 +3,7 @@ import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
 import ButtonComponent from "../ButtonComponent";
 import Link from "next/link";
+import OtpSendButton from "../OtpSendButton";
 export default function AdminForm() {
   return (
     <>
@@ -32,7 +33,7 @@ export default function AdminForm() {
               imageSource={"/icons/city.svg"}
             />
             {/* Make sure to save city as small letters and when searching by patient also search for small letters */}
-            <ButtonComponent text={"Get Started"} />
+            <OtpSendButton text="Submit" phoneNumber={""} />
           </div>
         </div>
       </section>

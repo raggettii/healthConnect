@@ -9,8 +9,14 @@ export default function OtpVerifyModal({
 }: OtpVerifyModalType) {
   return (
     <>
-      <div className="fixed inset-0 bg-[#0c4238] bg-opacity-60  flex justify-center items-center">
-        <div className="flex flex-col bg-[#011e0e] p-3  rounded-lg shadow-2xl">
+      <div
+        onClick={closeModal}
+        className="fixed inset-0 bg-[#0c4238] bg-opacity-60  flex justify-center items-center"
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="flex flex-col bg-[#011e0e] p-3  rounded-lg shadow-2xl"
+        >
           <button onClick={closeModal}>
             <Image
               className="bg-white "

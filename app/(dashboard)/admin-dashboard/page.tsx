@@ -1,7 +1,11 @@
+import AddDoctorButton from "@/app/components/AddDoctorButton";
+import ButtonComponent from "@/app/components/ButtonComponent";
+import DropDown from "@/app/components/DropDown";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
 
 export default function adminDashboard() {
+  const doctors = ["Rajesh", "Suresh"];
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
   const array: Array<data> = [
     {
@@ -39,6 +43,7 @@ export default function adminDashboard() {
   ];
   return (
     <>
+      <AddDoctorButton text={"+ Add Doctor"} />
       <div className="h-screen">
         <nav className="lg:ml-[240px] lg:mr-[240px] md:ml-[100px] md:mr-[100px] font-semibold md:text-lg  mt-12  ml-2 mr-2 p-2 rounded-t-xl bg-[#0b2b1c] h-[40px] ">
           <ul className="flex justify-between px-2">

@@ -40,32 +40,34 @@ export default function PatientDashboard() {
   ];
   return (
     <>
-      <div className="flex  md:ml-[1200px] ml-[330px]">
-        <BookAppointment text={"+ Book New Appointment"} />
-      </div>
-      <nav className="lg:ml-[240px] lg:mr-[240px] md:ml-[100px] md:mr-[100px] font-semibold md:text-lg  mt-12  ml-2 mr-2 p-2 rounded-t-xl bg-[#0b2b1c] h-[40px] ">
-        <ul className="flex justify-between px-2">
-          {navData.map((item, index) => (
-            <div key={index}>{item}</div>
-          ))}
-        </ul>
-        <div className=" flex flex-col gap-4 mt-4  ">
-          {array[0] ? (
-            array.map(({ date, time, status, doctor, key, patient }) => (
-              <NavData
-                date={date}
-                time={time}
-                status={status}
-                doctor={doctor}
-                key={key}
-                patient={patient}
-              />
-            ))
-          ) : (
-            <Nodata />
-          )}
+      <div className="h-screen">
+        <div className="flex   md:ml-[1200px] ml-[330px]">
+          <BookAppointment text={"+ Book New Appointment"} />
         </div>
-      </nav>
+        <nav className=" lg:ml-[240px] lg:mr-[240px] md:ml-[100px] md:mr-[100px] font-semibold md:text-lg  mt-12  ml-2 mr-2 p-2 rounded-t-xl bg-[#0b2b1c] h-[40px] ">
+          <ul className="flex justify-between px-2">
+            {navData.map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
+          </ul>
+          <div className=" flex flex-col gap-4 mt-4  ">
+            {array[0] ? (
+              array.map(({ date, time, status, doctor, key, patient }) => (
+                <NavData
+                  date={date}
+                  time={time}
+                  status={status}
+                  doctor={doctor}
+                  key={key}
+                  patient={patient}
+                />
+              ))
+            ) : (
+              <Nodata />
+            )}
+          </div>
+        </nav>
+      </div>
     </>
   );
 }

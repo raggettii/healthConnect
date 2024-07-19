@@ -3,12 +3,25 @@ import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import Image from "next/image";
 
-export default function ConfigModal({
+export default function AddDoctorModal({
   closeModal,
   label,
   placeholder,
-}: ConfigModalType) {
-  const dropdownContent = ["Schedule", "Pending", "Cancel", "Done"];
+}: AddDoctorModalType) {
+  const dropdownContent = [
+    "Family Medicine",
+    "Cardiology",
+    "Dermatology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Neurology",
+    "Obstetrics ",
+    "Oncology",
+    "Orthopedics",
+    "Pediatrics",
+    "Psychiatry",
+    "Surgery",
+  ];
   return (
     <>
       <div
@@ -32,22 +45,15 @@ export default function ConfigModal({
             {label}
           </h2>
           <div className="ml-4">
-            <DropDown label="Select Status" dropdownContent={dropdownContent} />
+            <DropDown
+              label="Select Specilization"
+              dropdownContent={dropdownContent}
+            />
           </div>
           <InputBox
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
-          />
-          <InputBox
-            placeholder="dd/mm/yyyy"
-            label=""
-            imageSource="icons/calender.svg"
-          />
-          <InputBox
-            placeholder="HH : MM"
-            label=""
-            imageSource="icons/calender.svg"
           />
           <button
             onClick={closeModal}
@@ -61,7 +67,7 @@ export default function ConfigModal({
   );
 }
 
-type ConfigModalType = {
+type AddDoctorModalType = {
   closeModal: () => void;
   label: string;
   placeholder: string;

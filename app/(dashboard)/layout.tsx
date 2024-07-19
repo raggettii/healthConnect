@@ -17,7 +17,7 @@ export default function dashboardLayout({
       <nav className=" border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
         <MainLogoName />
       </nav>
-      <div className="mt-10 h-screen">
+      <div className="mt-10 ">
         <div className="flex justify-between">
           <div>
             <h1
