@@ -47,7 +47,7 @@ export default function ConfigModal({
           <InputBox
             placeholder="HH : MM"
             label=""
-            imageSource="icons/calender.svg"
+            imageSource="icons/clock.svg"
           />
           <button
             onClick={closeModal}

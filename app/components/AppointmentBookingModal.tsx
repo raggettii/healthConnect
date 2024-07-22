@@ -60,9 +60,14 @@ export default function AppointmentBookingModal({
                   placeholder="ex. Monthly Checkup"
                 />
                 <InputBox
-                  label="Expected Appointment date "
+                  label="Expected Appointment Date "
                   imageSource="icons/calender.svg"
                   placeholder="dd/mm/yyyy"
+                />
+                <InputBox
+                  label="Expected Appointment Time "
+                  imageSource="icons/clock.svg"
+                  placeholder="HH : MM"
                 />
               </div>
               <div className="flex justify-center">

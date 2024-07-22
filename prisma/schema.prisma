@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+  id String @id @default(uuid())
+  fullName String 
+  email String @unique
+  phoneNumber String @unique
+  appointment Appointment[]
+} 
+model Hospital{
+  id String @id @default(uuid())
+  hospitalName String @unique
+  email String @unique
+  phoneNumber String @unique
+  city String
+  appointments Appointment[]
+}
+
+model Doctor {
+  id String @id @default(uuid())
+  name String
+  specialization SPECIALIZATION[]
+  appointments Appointment[]
+}
+
+model Appointment {
+  id String @id @default(uuid())
+  doctorSpecialization SPECIALIZATION @default(NA)
+  date String 
+  time String @default("NA")
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctorId String
+  reason String
+  patient User @relation(fields: [patientId] , references: [id])
+  patientId String
+  hospital Hospital @relation(fields: [hospitalId] , references: [id])
+  hospitalId String
+  status STATUS @default(PENDING)
+}
+// update and cancelled status will work as 
+// when update status button clicked from 
+// fe just search for the same appointment and 
+// dot karke status par jaake usko update kar denge 
+enum STATUS {
+  SCHEDULED
+  PENDING
+  CANCELLED
+  DONE
+}
+
+enum SPECIALIZATION{
+    NA
+    Family_Medicine
+    Cardiology
+    Dermatology
+    Endocrinology
+    Gastroenterology
+    Neurology
+    Obstetrics
+    Oncology
+    Orthopedics
+    Pediatrics
+    Psychiatry
+    Surgery
+}

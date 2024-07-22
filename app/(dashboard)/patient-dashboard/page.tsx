@@ -2,7 +2,7 @@ import BookAppointment from "@/app/components/BookAppointment";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
 export default function PatientDashboard() {
-  const navData = ["Doctor", "Date", "Time", "Status", "Cancel"];
+  const navData = ["Patient", "Doctor", "Date", "Time", "Status", "Cancel"];
   //   const firstName = "Ranjit";
   const array: Array<data> = [
     {
@@ -41,7 +41,7 @@ export default function PatientDashboard() {
   return (
     <>
       <div className="h-screen">
-        <div className="flex   md:ml-[1200px] ml-[330px]">
+        <div className="flex  justify-end mr-3 lg:mr-8">
           <BookAppointment text={"+ Book New Appointment"} />
         </div>
         <nav className=" lg:ml-[240px] lg:mr-[240px] md:ml-[100px] md:mr-[100px] font-semibold md:text-lg  mt-12  ml-2 mr-2 p-2 rounded-t-xl bg-[#0b2b1c] h-[40px] ">

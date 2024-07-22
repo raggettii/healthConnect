@@ -5,18 +5,19 @@ const InputBox: React.FC<InputBoxProps> = ({
   placeholder,
   label,
   imageSource,
+  onChange,
+  value,
+  error,
 }) => {
-  const [inputText, setInputText] = useState<string>("");
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputText(event.target.value);
-    console.log(event.target.value);
-  };
-
   return (
     <>
       <div className="mr-3 ml-3 text-sm">
         {label}
-        <div className="flex mb-3 mr-3 ml-3 border-1 border font-medium   rounded-lg shadow-lg hover:bg-[#313131] bg-[#3d3d3d]  w-[200px]">
+        <div
+          className={`flex mb-3 mr-3 ml-3 border-1 border font-medium   rounded-lg shadow-lg hover:bg-[#313131] bg-[#3d3d3d]  w-[200px]  ${
+            error ? "border-red-500" : "border-gray-400"
+          }`}
+        >
           <Image
             className="pl-1"
             src={imageSource}
@@ -25,12 +26,14 @@ const InputBox: React.FC<InputBoxProps> = ({
             height={14}
           />
           <input
+            value={value}
             type="text"
             placeholder={placeholder}
-            onChange={handleInputChange}
-            className="text-[#11111]  font-medium  text-start rounded-lg  hover:bg-[#313131] p-2 ml-[7px] w-[175px] bg-[#3d3d3d] "
+            onChange={onChange}
+            className={`text-[#11111]  font-medium  text-start rounded-lg  hover:bg-[#313131] p-2 ml-[7px] w-[175px] bg-[#3d3d3d]`}
           />
         </div>
+        {error && <p className="text-red-500 text-[12px] ">{error}</p>}
       </div>
     </>
   );
@@ -40,6 +43,9 @@ type InputBoxProps = {
   placeholder: string;
   label: string;
   imageSource: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  error: string;
 };
 
 export default InputBox;
