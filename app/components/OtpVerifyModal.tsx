@@ -33,6 +33,9 @@ export default function OtpVerifyModal({
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
+            value=""
+            error=""
+            onChange={() => {}}
           />
           <button
             onClick={closeModal}

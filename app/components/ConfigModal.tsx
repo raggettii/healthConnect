@@ -38,16 +38,25 @@ export default function ConfigModal({
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
+            value=""
+            error=""
+            onChange={() => {}}
           />
           <InputBox
             placeholder="dd/mm/yyyy"
             label=""
             imageSource="icons/calender.svg"
+            value=""
+            error=""
+            onChange={() => {}}
           />
           <InputBox
             placeholder="HH : MM"
             label=""
             imageSource="icons/clock.svg"
+            value=""
+            error=""
+            onChange={() => {}}
           />
           <button
             onClick={closeModal}

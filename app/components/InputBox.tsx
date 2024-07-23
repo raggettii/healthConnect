@@ -45,7 +45,7 @@ type InputBoxProps = {
   imageSource: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   value: string;
-  error: string;
+  error: string | undefined;
 };
 
 export default InputBox;

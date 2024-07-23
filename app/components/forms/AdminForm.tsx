@@ -7,9 +7,12 @@ import Heading from "../Heading";
 import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
 import OtpSendButton from "../OtpSendButton";
-import { error } from "console";
+import validateField from "@/app/functions/validateField";
+import axios from "axios";
 
 export default function AdminForm() {
+  // const prisma = new PrismaClient();
+
   const prev: Array<String> = [];
 
   type SetterType = React.Dispatch<React.SetStateAction<string>>;
@@ -20,34 +23,17 @@ export default function AdminForm() {
     validator: ValidatorType;
   }
 
-  const validateField = (
-    schema: z.AnyZodObject,
-    field: string,
-    value: string
-  ) => {
-    // for parsing the entered value through
-    // zod we need to create a special schema
-    // that is created each time for different
-    // inputs as per required value
-    const validateSchema = z.object({
-      [field]: schema.shape[field],
-    });
-    try {
-      const { success } = validateSchema.safeParse(value);
-      if (success) return "";
-      else throw new Error();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return error.errors[0]?.message || "Invalid value";
-      } else return "Something Bad Happened";
-    }
-  };
+  const errorMap: Map<string, string> = new Map();
+  errorMap.set("hospitalName", "");
+  errorMap.set("emailH", "");
+  errorMap.set("phoneNumberH", "");
+  errorMap.set("city", "");
 
   const [hospitalName, setHospitalName] = useState<string>("");
   const [emailH, setEmailH] = useState<string>("");
   const [phoneNumberH, setPhoneNumberH] = useState<string>("");
   const [city, setCity] = useState<string>("");
-  const [errors, setErrors] = useState<[{ [key: string]: string }]>([{}]);
+  const [errors, setErrors] = useState<Map<string, string>>(errorMap);
 
   const debouncedHospitalName = useDebounce(hospitalName, 500);
   const debouncedEmailH = useDebounce(emailH, 500);
@@ -60,7 +46,7 @@ export default function AdminForm() {
   console.log(city);
   const validate = (field: string, value: string) => {
     const errorMessage: string = validateField(adminSignupSchema, field, value);
-    setErrors((prev) => ({ ...prev, [field]: errorMessage }));
+    setErrors(errorMap.set(field, errorMessage));
   };
 
   const onClickHandler =
@@ -87,6 +73,16 @@ export default function AdminForm() {
     validate("city", debouncedCity);
   }, [debouncedCity]);
 
+  const onSubmit = async () => {
+    const response = await axios.post("/api/admin-signup", {
+      hospitalName,
+      emailH,
+      phoneNumberH,
+      city,
+    });
+    console.log(`${hospitalName}Admin created successfully ${response}`);
+  };
+
   return (
     <>
       <section className="flex justify-center h-screen">
@@ -100,7 +96,7 @@ export default function AdminForm() {
               imageSource={"/icons/hospital_icon.svg"}
               value={hospitalName}
               onChange={onClickHandler(setHospitalName, "hospitalName")}
-              error={"errors[0].hospitalEmail"}
+              error={errors.get("hospitalName")}
             />
             <InputBox
               label={"Email"}
@@ -108,7 +104,7 @@ export default function AdminForm() {
               imageSource={"/icons/email.svg"}
               value={emailH}
               onChange={onClickHandler(setEmailH, "hospitalEmail")}
-              error={"errors.hospitalEmail"}
+              error={errors.get("hospitalEmail")}
             />
             <InputBox
               label={"Phone Number"}
@@ -116,7 +112,7 @@ export default function AdminForm() {
               imageSource={"/icons/phone.svg"}
               value={phoneNumberH}
               onChange={onClickHandler(setPhoneNumberH, "phoneNumberH")}
-              error={"errors.phoneNumberH"}
+              error={errors.get("phoneNumberH")}
             />
             <InputBox
               label={"City"}
@@ -124,9 +120,10 @@ export default function AdminForm() {
               imageSource={"/icons/city.svg"}
               value={city}
               onChange={onClickHandler(setCity, "city")}
-              error={"errors.city"}
+              error={errors.get("city")}
             />
             {/* Make sure to save city as small letters and when searching by patient also search for small letters */}
+            <button onClick={onSubmit}>Button</button>
             <OtpSendButton text="Submit" phoneNumber={""} />
           </div>
         </div>

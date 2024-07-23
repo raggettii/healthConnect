@@ -58,16 +58,25 @@ export default function AppointmentBookingModal({
                   label="Reason for Appointment"
                   imageSource="icons/pen.svg"
                   placeholder="ex. Monthly Checkup"
+                  value=""
+                  error=""
+                  onChange={() => {}}
                 />
                 <InputBox
                   label="Expected Appointment Date "
                   imageSource="icons/calender.svg"
                   placeholder="dd/mm/yyyy"
+                  value=""
+                  error=""
+                  onChange={() => {}}
                 />
                 <InputBox
                   label="Expected Appointment Time "
                   imageSource="icons/clock.svg"
                   placeholder="HH : MM"
+                  value=""
+                  error=""
+                  onChange={() => {}}
                 />
               </div>
               <div className="flex justify-center">

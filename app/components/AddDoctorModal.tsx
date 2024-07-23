@@ -54,6 +54,9 @@ export default function AddDoctorModal({
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
+            value=""
+            error=""
+            onChange={() => {}}
           />
           <button
             onClick={closeModal}
