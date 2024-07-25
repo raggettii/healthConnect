@@ -1,13 +1,26 @@
+"use client";
+import { ChangeEvent, useState } from "react";
 import ButtonComponent from "./ButtonComponent";
 import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import Image from "next/image";
+import axios from "axios";
 
 export default function AddDoctorModal({
   closeModal,
   label,
   placeholder,
 }: AddDoctorModalType) {
+  const [selectedValue, setSelectedValue] = useState<string>("");
+  const handleDropdownChange = (item: string) => {
+    setSelectedValue(item);
+  };
+  const [doctorName, setDoctorName] = useState<string>("");
+  const onClickHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setDoctorName(e.target.value);
+  };
+  console.log(doctorName);
+  console.log(selectedValue);
   const dropdownContent = [
     "Family Medicine",
     "Cardiology",
@@ -22,6 +35,12 @@ export default function AddDoctorModal({
     "Psychiatry",
     "Surgery",
   ];
+  const onSubmit = async () => async () => {
+    const response = await axios.post("api/add-doctor", {
+      // yaaha aaiga dono data aur same kar denge
+    });
+    console.log("Doctor added successfully:", response.data);
+  };
   return (
     <>
       <div
@@ -48,18 +67,19 @@ export default function AddDoctorModal({
             <DropDown
               label="Select Specilization"
               dropdownContent={dropdownContent}
+              onSelect={handleDropdownChange}
             />
           </div>
           <InputBox
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
-            value=""
+            value={doctorName}
             error=""
-            onChange={() => {}}
+            onChange={onClickHandler}
           />
           <button
-            onClick={closeModal}
+            onClick={onSubmit}
             className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
           >
             Submit

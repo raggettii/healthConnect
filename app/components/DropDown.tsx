@@ -4,9 +4,11 @@ import { useState } from "react";
 export default function DropDown({
   label,
   dropdownContent,
+  onSelect,
 }: {
   label: string;
   dropdownContent: Array<string>;
+  onSelect: (item: string) => void;
 }) {
   const [dropdownHeader, setDropdownHeader] = useState<string>(label);
   const headerChange = (item: string) => {
@@ -17,6 +19,7 @@ export default function DropDown({
   const togglerAndHeader = (item: string) => {
     headerChange(item);
     setDropdownToggle(!dropdownToggle);
+    onSelect(item);
   };
   const toggler = () => {
     setDropdownToggle(!dropdownToggle);

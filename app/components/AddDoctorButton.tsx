@@ -1,9 +1,14 @@
 "use client";
-
+import axios from "axios";
 import { useState } from "react";
 import AddDoctorModal from "./AddDoctorModal";
 
 export default function AddDoctorButton({ text }: { text: string }) {
+  const [selectedValue, setSelectedValue] = useState<string>("");
+  const handleDropdownChange = (item: string) => {
+    setSelectedValue(item);
+  };
+  
   const [isConfigModalOpen, setConfigModalOpen] = useState<boolean>(false);
   const onClickHandler = () => {
     setConfigModalOpen(!isConfigModalOpen);

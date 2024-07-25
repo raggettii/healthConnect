@@ -3,7 +3,7 @@ import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
 export default function PatientDashboard() {
   const navData = ["Patient", "Doctor", "Date", "Time", "Status", "Cancel"];
-  //   const firstName = "Ranjit";
+    // const firstName = "Ranjit";
   const array: Array<data> = [
     {
       key: "unique string",

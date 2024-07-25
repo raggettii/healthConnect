@@ -1,3 +1,5 @@
+"use client";
+import { ChangeEvent, useState } from "react";
 import BookAppointment from "./BookAppointment";
 import DropDown from "./DropDown";
 import InputBox from "./InputBox";
@@ -23,6 +25,23 @@ export default function AppointmentBookingModal({
     "Psychiatry",
     "Surgery",
   ];
+  const [specialisation, setSpecialisation] = useState<string>("");
+  const [doctorName, setDoctorName] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [time, setTime] = useState<string>("");
+  const [reason, setReason] = useState<string>("");
+  const onClickHandler1 =
+    (item: string) => (e: ChangeEvent<HTMLInputElement>) => {
+      if (item === "reason") setReason(e.target.value);
+      if (item === "date") setDate(e.target.value);
+      if (item === "time") setTime(e.target.value);
+    };
+  const dropdownChangeSpe = (item: string) => {
+    setSpecialisation(item);
+  };
+  const dropdownChangeDoc = (item: string) => {
+    setDoctorName(item);
+  };
   return (
     <>
       <div
@@ -38,7 +57,7 @@ export default function AppointmentBookingModal({
               <button onClick={onClickHandler}>
                 <Image
                   className="bg-white"
-                  src={"icons/cross.svg"}
+                  src={"/icons/cross.svg"}
                   alt="cross"
                   height={12}
                   width={12}
@@ -50,33 +69,38 @@ export default function AppointmentBookingModal({
                 <DropDown
                   label={"Select Specialisation"}
                   dropdownContent={dropdownContent}
+                  onSelect={dropdownChangeSpe}
                 />
-                <DropDown label={"Select Doctor"} dropdownContent={doctors} />
+                <DropDown
+                  label={"Select Doctor"}
+                  dropdownContent={doctors}
+                  onSelect={dropdownChangeDoc}
+                />
               </div>
               <div className="md:flex">
                 <InputBox
                   label="Reason for Appointment"
-                  imageSource="icons/pen.svg"
+                  imageSource="/icons/pen.svg"
                   placeholder="ex. Monthly Checkup"
-                  value=""
+                  value={reason}
                   error=""
-                  onChange={() => {}}
+                  onChange={onClickHandler1("reason")}
                 />
                 <InputBox
                   label="Expected Appointment Date "
-                  imageSource="icons/calender.svg"
+                  imageSource="/icons/calender.svg"
                   placeholder="dd/mm/yyyy"
-                  value=""
+                  value={date}
                   error=""
-                  onChange={() => {}}
+                  onChange={onClickHandler1("date")}
                 />
                 <InputBox
                   label="Expected Appointment Time "
-                  imageSource="icons/clock.svg"
+                  imageSource="/icons/clock.svg"
                   placeholder="HH : MM"
-                  value=""
+                  value={time}
                   error=""
-                  onChange={() => {}}
+                  onChange={onClickHandler1("time")}
                 />
               </div>
               <div className="flex justify-center">

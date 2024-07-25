@@ -1,14 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
-export async function POST(req: NextApiRequest) {
+export async function POST(req: Request, res: Response) {
   const { hospitalName, emailH, phoneNumberH, city }: signUpAdminType =
-    req.body;
+    await req.json();
   const prisma = new PrismaClient();
-  console.log(req.body);
-  //   console.log(req.json);
-  console.log(hospitalName);
-
   try {
     const response = await prisma.hospital.create({
       data: {
@@ -24,9 +19,12 @@ export async function POST(req: NextApiRequest) {
     });
   } catch (error) {
     console.error(`Error occured while signup at admin ${error}`);
-    return NextResponse.json({
-      error,
-    });
+    return NextResponse.json(
+      {
+        error,
+      },
+      { status: 409 }
+    );
   }
 }
 type signUpAdminType = {

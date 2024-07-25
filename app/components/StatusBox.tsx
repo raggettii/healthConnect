@@ -3,13 +3,13 @@ import Image from "next/image";
 export default function StatusBox({ status }: { status: string }) {
   const func = () => {
     switch (status) {
-      case "scheduled":
+      case "SCHEDULED":
         return "/icons/check.svg";
-      case "pending":
+      case "PENDING":
         return "/icons/loader.svg";
-      case "cancelled":
+      case "CANCELLED":
         return "/icons/cross.svg";
-      case "done":
+      case "DONE":
         return "/icons/dash.svg";
     }
   };

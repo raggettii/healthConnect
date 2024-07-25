@@ -48,7 +48,7 @@ export default function NavData({
           <StatusBox status={status} />
         </span>
         <button className="lg:mr-6 ml-6   w-[40px] " onClick={onClickHandler}>
-          <Image src={"icons/circle.svg"} alt="corss" height={10} width={10} />
+          <Image src={"/icons/circle.svg"} alt="corss" height={10} width={10} />
         </button>
         {isModalOpen && (
           <OtpVerifyModal

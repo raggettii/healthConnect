@@ -3,17 +3,26 @@ import ButtonComponent from "@/app/components/ButtonComponent";
 import DropDown from "@/app/components/DropDown";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
+import { PrismaClient } from "@prisma/client";
 
-export default function adminDashboard() {
-  const doctors = ["Rajesh", "Suresh"];
+export async function adminDashboard() {
+  const prisma = new PrismaClient();
+  // const doctors = ["Rajesh", "Suresh"];
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
+  // const array = await prisma.appointment.findMany({
+  //   where: {
+  //     //patient and hospital are same
+  //   },
+  // });
+  // also need to use inside it of useEffect as when the navData changes
+  // it needs to refresh
   const array: Array<data> = [
     {
       key: "unique string",
-      patient: "raamkaa",
+      patient: "abhishake",
       date: "date hai",
       time: "1",
-      status: "scheduled",
+      status: "DONE",
       doctor: "Dr singh",
     },
     {
@@ -21,7 +30,7 @@ export default function adminDashboard() {
       patient: "raamkaa",
       date: "date hai",
       time: "12 baje",
-      status: "pending",
+      status: "PENDING",
       doctor: "Dr singh",
     },
     {
@@ -29,15 +38,15 @@ export default function adminDashboard() {
       patient: "raamkaa",
       date: "date hai",
       time: "12 baje",
-      status: "cancelled",
+      status: "CANCELLED",
       doctor: "Dr Abhi Singh bhadoriys is the badhf hsdh",
     },
     {
       key: "unique string",
-      patient: "raamkaa",
+      patient: "shubham",
       date: "date hai",
       time: "12 baje",
-      status: "done",
+      status: "PENDING",
       doctor: "Dr singh",
     },
   ];
@@ -80,3 +89,5 @@ type data = {
   doctor: string;
   patient: string;
 };
+
+export default adminDashboard;

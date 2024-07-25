@@ -1,4 +1,6 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import useDebounce from "@/app/functions/debounce";
 import { z } from "zod";
 import { adminSignupSchema } from "@/app/zod";
@@ -11,6 +13,7 @@ import validateField from "@/app/functions/validateField";
 import axios from "axios";
 
 export default function AdminForm() {
+  const router = useRouter();
   // const prisma = new PrismaClient();
 
   const prev: Array<String> = [];
@@ -74,13 +77,44 @@ export default function AdminForm() {
   }, [debouncedCity]);
 
   const onSubmit = async () => {
-    const response = await axios.post("/api/admin-signup", {
+    const result = adminSignupSchema.safeParse({
       hospitalName,
-      emailH,
+      hospitalEmail: emailH,
       phoneNumberH,
       city,
     });
-    console.log(`${hospitalName}Admin created successfully ${response}`);
+
+    if (!result.success) {
+      // Update the errors state with all validation errors
+      const fieldErrors = new Map<string, string>();
+      result.error.errors.forEach((error) => {
+        if (error.path[0]) {
+          fieldErrors.set(error.path[0], error.message);
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error("Please fix the errors before submitting");
+      return;
+    }
+
+    try {
+      const response = await axios.post("/api/admin-signup", {
+        hospitalName,
+        emailH,
+        phoneNumberH,
+        city,
+      });
+      if (response.status === 200) {
+        toast.success("Post created successfully");
+        router.refresh();
+        router.push("/api/auth/signin");
+        console.log(`${hospitalName}Admin created successfully ${response}`);
+      }
+      // console.log("Hi sbove the 409");
+    } catch (error) {
+      alert("Email and PhoneNumber Sould be unique (Error:409)");
+      console.error(`Error Occured While Creating Admin ${error}`);
+    }
   };
 
   return (
@@ -123,8 +157,13 @@ export default function AdminForm() {
               error={errors.get("city")}
             />
             {/* Make sure to save city as small letters and when searching by patient also search for small letters */}
-            <button onClick={onSubmit}>Button</button>
-            <OtpSendButton text="Submit" phoneNumber={""} />
+            <button
+              className="text-center font-bold text-lg hover:text-green-800 p-2  mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
+              onClick={onSubmit}
+            >
+              Button
+            </button>
+            {/* <OtpSendButton text="Submit" phoneNumber={""} /> */}
           </div>
         </div>
       </section>

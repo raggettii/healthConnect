@@ -18,6 +18,7 @@ model User{
   id String @id @default(uuid())
   fullName String 
   email String @unique
+  password String
   phoneNumber String @unique
   appointment Appointment[]
 } 
@@ -27,21 +28,25 @@ model Hospital{
   email String @unique
   phoneNumber String @unique
   city String
+  password String 
   appointments Appointment[]
+  doctors Doctor[]
 }
 
 model Doctor {
   id String @id @default(uuid())
   name String
-  specialization SPECIALIZATION[]
+  specialization SPECIALIZATION @default(NA)
   appointments Appointment[]
+  hospital Hospital @relation(fields: [hospitalId] , references: [id])
+  hospitalId String
 }
 
 model Appointment {
   id String @id @default(uuid())
   doctorSpecialization SPECIALIZATION @default(NA)
   date String 
-  time String @default("NA")
+  time String @default("NA") 
   doctor Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
   reason String
