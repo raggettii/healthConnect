@@ -8,11 +8,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
 
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+}
+        
 
 model User{
   id String @id @default(uuid())
@@ -20,15 +22,16 @@ model User{
   email String @unique
   password String
   phoneNumber String @unique
+  city String
   appointment Appointment[]
 } 
 model Hospital{
   id String @id @default(uuid())
-  hospitalName String @unique
+  fullName String @unique
   email String @unique
+  password String 
   phoneNumber String @unique
   city String
-  password String 
   appointments Appointment[]
   doctors Doctor[]
 }

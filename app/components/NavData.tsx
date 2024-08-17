@@ -54,7 +54,7 @@ export default function NavData({
           <OtpVerifyModal
             closeModal={onClickHandler}
             label={"Cancel Appointment"}
-            placeholder={"Reason for Appointment"}
+            placeholder={""}
           />
         )}
         {isConfigModalOpen && (

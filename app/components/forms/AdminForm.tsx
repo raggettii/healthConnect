@@ -1,30 +1,47 @@
 "use client";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import useDebounce from "@/app/functions/debounce";
-import { z } from "zod";
+// import { z } from "zod";
 import { adminSignupSchema } from "@/app/zod";
 import React, { ChangeEvent, useState } from "react";
 import Heading from "../Heading";
 import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
-import OtpSendButton from "../OtpSendButton";
+// import OtpSendButton from "../OtpSendButton";
 import validateField from "@/app/functions/validateField";
 import axios from "axios";
 
-export default function AdminForm() {
+export default function AdminForm({
+  name,
+  namePlaceholder,
+  emailPlaceholder,
+}: {
+  name: string;
+  namePlaceholder: string;
+  emailPlaceholder: string;
+}) {
+  const pathName = usePathname();
   const router = useRouter();
+  const actualPathname = pathName.split("/");
+  console.log(actualPathname);
+  let signupurl;
+  if (actualPathname[1] === "patient-signup") {
+    signupurl = "/api/patient-signup";
+  } else signupurl = "api/admin-signup";
   // const prisma = new PrismaClient();
 
-  const prev: Array<String> = [];
+  // const prev: Array<String> = [];
 
   type SetterType = React.Dispatch<React.SetStateAction<string>>;
   type ValidatorType = (value: string) => void;
 
-  interface SetterValidator {
-    setter: SetterType;
-    validator: ValidatorType;
-  }
+  // interface SetterValidator {
+  //   setter: SetterType;
+  //   validator: ValidatorType;
+  // }
 
   const errorMap: Map<string, string> = new Map();
   errorMap.set("hospitalName", "");
@@ -33,6 +50,7 @@ export default function AdminForm() {
   errorMap.set("city", "");
 
   const [hospitalName, setHospitalName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [emailH, setEmailH] = useState<string>("");
   const [phoneNumberH, setPhoneNumberH] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -42,6 +60,7 @@ export default function AdminForm() {
   const debouncedEmailH = useDebounce(emailH, 500);
   const debouncedPhoneNumberH = useDebounce(phoneNumberH, 500);
   const debouncedCity = useDebounce(city, 500);
+  const debouncedPassword = useDebounce(password, 500);
 
   console.log(hospitalName);
   console.log(emailH);
@@ -52,17 +71,22 @@ export default function AdminForm() {
     setErrors(errorMap.set(field, errorMessage));
   };
 
-  const onClickHandler =
+  const onChangeHandler =
     (setter: SetterType, field: string) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setter(value);
       validate(field, value);
     };
-
+  // validate k andar field means that jo map hai uski
+  // index waali value aur saath mein schema k andar
+  // item ki value bhi same hai
   React.useEffect(() => {
     validate("hospitalName", debouncedHospitalName);
   }, [debouncedHospitalName]);
+  React.useEffect(() => {
+    validate("password", debouncedPassword);
+  }, [debouncedPassword]);
 
   React.useEffect(() => {
     validate("hospitalEmail", debouncedEmailH);
@@ -82,6 +106,7 @@ export default function AdminForm() {
       hospitalEmail: emailH,
       phoneNumberH,
       city,
+      password,
     });
 
     if (!result.success) {
@@ -98,16 +123,17 @@ export default function AdminForm() {
     }
 
     try {
-      const response = await axios.post("/api/admin-signup", {
+      const response = await axios.post(`${signupurl}`, {
         hospitalName,
         emailH,
         phoneNumberH,
         city,
+        password,
       });
       if (response.status === 200) {
         toast.success("Post created successfully");
         router.refresh();
-        router.push("/api/auth/signin");
+        router.push("/admin-dashboard");
         console.log(`${hospitalName}Admin created successfully ${response}`);
       }
       // console.log("Hi sbove the 409");
@@ -122,22 +148,22 @@ export default function AdminForm() {
       <section className="flex justify-center h-screen">
         <div className="flex flex-col justify-center">
           <div className="flex flex-col gap-2 p-5 border-2 border-gray-400 rounded-lg shadow-lg">
-            <Heading text={"Hii Admin..."} />
+            <Heading text={"Hii there..."} />
             <SubHeading text={"Get started with Appointments"} />
             <InputBox
-              label={"Hospital Name"}
-              placeholder={"City Hospital"}
+              label={name}
+              placeholder={namePlaceholder}
               imageSource={"/icons/hospital_icon.svg"}
               value={hospitalName}
-              onChange={onClickHandler(setHospitalName, "hospitalName")}
+              onChange={onChangeHandler(setHospitalName, "hospitalName")}
               error={errors.get("hospitalName")}
             />
             <InputBox
               label={"Email"}
-              placeholder={"cityhospital@gmail.com"}
+              placeholder={emailPlaceholder}
               imageSource={"/icons/email.svg"}
               value={emailH}
-              onChange={onClickHandler(setEmailH, "hospitalEmail")}
+              onChange={onChangeHandler(setEmailH, "hospitalEmail")}
               error={errors.get("hospitalEmail")}
             />
             <InputBox
@@ -145,15 +171,23 @@ export default function AdminForm() {
               placeholder={"+00 0000000000"}
               imageSource={"/icons/phone.svg"}
               value={phoneNumberH}
-              onChange={onClickHandler(setPhoneNumberH, "phoneNumberH")}
+              onChange={onChangeHandler(setPhoneNumberH, "phoneNumberH")}
               error={errors.get("phoneNumberH")}
+            />
+            <InputBox
+              label={"Password"}
+              placeholder={"Enter your Password"}
+              imageSource={"/icons/key.svg"}
+              value={password}
+              onChange={onChangeHandler(setPassword, "password")}
+              error={errors.get("password")}
             />
             <InputBox
               label={"City"}
               placeholder={"Delhi"}
               imageSource={"/icons/city.svg"}
               value={city}
-              onChange={onClickHandler(setCity, "city")}
+              onChange={onChangeHandler(setCity, "city")}
               error={errors.get("city")}
             />
             {/* Make sure to save city as small letters and when searching by patient also search for small letters */}
@@ -161,8 +195,18 @@ export default function AdminForm() {
               className="text-center font-bold text-lg hover:text-green-800 p-2  mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
               onClick={onSubmit}
             >
-              Button
+              Submit
             </button>
+            {actualPathname[1] === "patient-signup" ? (
+              <Link
+                href={"/admin-signup"}
+                className="pl-24 text-[12px] text-white font-bold hover:text-green-800"
+              >
+                Admin ?
+              </Link>
+            ) : (
+              <div></div>
+            )}
             {/* <OtpSendButton text="Submit" phoneNumber={""} /> */}
           </div>
         </div>

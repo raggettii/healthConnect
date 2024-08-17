@@ -29,14 +29,14 @@ export default function OtpVerifyModal({
           <h2 className="text-center m-4 text-white font-semibold text-lg">
             {label}
           </h2>
-          <InputBox
+          {/* <InputBox
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
             value=""
             error=""
             onChange={() => {}}
-          />
+          /> */}
           <button
             onClick={closeModal}
             className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"

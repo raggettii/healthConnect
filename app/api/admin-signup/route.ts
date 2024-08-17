@@ -1,8 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: Request, res: Response) {
-  const { hospitalName, emailH, phoneNumberH, city }: signUpAdminType =
-    await req.json();
+  const {
+    password,
+    hospitalName,
+    emailH,
+    phoneNumberH,
+    city,
+  }: signUpAdminType = await req.json();
   const prisma = new PrismaClient();
   try {
     const response = await prisma.hospital.create({
@@ -11,6 +16,7 @@ export async function POST(req: Request, res: Response) {
         email: emailH,
         phoneNumber: phoneNumberH,
         city: city,
+        password: password,
       },
     });
     console.log(`Hospital created successfully ${response}`);
@@ -32,4 +38,5 @@ type signUpAdminType = {
   emailH: string;
   phoneNumberH: string;
   city: string;
+  password: string;
 };

@@ -1,7 +1,11 @@
+"use client";
+import { usePathname } from "next/navigation";
+import { signIn, signOut, useSession } from "next-auth/react";
 import MainLogoName from "../components/MainLogoName";
 import { Merriweather } from "next/font/google";
 import SubHeading from "../components/SubHeading";
 import BookAppointment from "../components/BookAppointment";
+import Link from "next/link";
 const merriWeather = Merriweather({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -11,11 +15,24 @@ export default function dashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const sessionData = useSession();
+  console.log(`${JSON.stringify(sessionData)} `);
+  const pathName = usePathname();
+  const newPathName = pathName.split("/");
+  console.log(newPathName[1]);
   const firstName = "Guru Nanak hospitals";
   return (
     <>
-      <nav className=" border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
+      <nav className="flex justify-between border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
         <MainLogoName />
+        <button
+          className=" border p-1 rounded shadow-lg"
+          onClick={() => {
+            signOut();
+          }}
+        >
+          SignOut
+        </button>
       </nav>
       <div className="mt-10 ">
         <div className="flex justify-between">
@@ -26,7 +43,11 @@ export default function dashboardLayout({
               Welcome, <span className="text-[#0e7490]">{firstName}</span>
             </h1>
             <div className="ml-20 lg:ml-32 lg:text-sm ">
-              <SubHeading text="Below are Your Appointments" />
+              {newPathName[1] === "hospitals" ? (
+                <SubHeading text="Available Hospitals in your City" />
+              ) : (
+                <SubHeading text="Below are Your Appointments" />
+              )}
             </div>
           </div>
         </div>

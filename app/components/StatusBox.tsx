@@ -11,6 +11,8 @@ export default function StatusBox({ status }: { status: string }) {
         return "/icons/cross.svg";
       case "DONE":
         return "/icons/dash.svg";
+      default:
+        return "";
     }
   };
   return (

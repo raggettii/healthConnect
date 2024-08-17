@@ -8,6 +8,10 @@ const adminSignupSchema = z.object({
     .max(16, "Maximum Length Exceeded ")
     .nonempty({ message: "Field is Required" }),
   city: z.string().nonempty({ message: "Field is Required" }),
+  password: z
+    .string()
+    .min(6, "Minimum Length required is 6")
+    .nonempty({ message: "" }),
 });
 
 const userSignupSchema = z.object({
@@ -18,6 +22,20 @@ const userSignupSchema = z.object({
     .max(16, "Maximum Length Exceeded")
     .nonempty({ message: "Field is Required" }),
   city: z.string().nonempty({ message: "Field is Required" }),
+  password: z
+    .string()
+    .min(6, "Minimum Length required is 6")
+    .nonempty({ message: "" }),
 });
 
-export { adminSignupSchema, userSignupSchema };
+const scheduleAppointment = z.object({
+  // const date = z.string().date(),
+  specialization: z.string(),
+  doctorName: z.string(),
+  date: z.string().date("Make sure its a Date"),
+  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: "Make sure its valid time ",
+  }),
+});
+
+export { adminSignupSchema, userSignupSchema, scheduleAppointment };

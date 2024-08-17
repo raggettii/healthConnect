@@ -8,8 +8,8 @@ const NavBar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white text-2xl font-bold">HealthConnect</div>
         <div className="hidden md:flex space-x-4">
-          <Link href="/">
-            <p className="text-white hover:text-gray-300">Home</p>
+          <Link href="/patient-dashboard">
+            <p className="text-white hover:text-gray-300">Dashboard</p>
           </Link>
           <Link href="/patient-signup">
             <p className="text-white hover:text-gray-300">Signup</p>
@@ -17,8 +17,8 @@ const NavBar = () => {
           <Link href="/api/auth/signin">
             <p className="text-white hover:text-gray-300">Signin</p>
           </Link>
-          <Link href="/contact">
-            <p className="text-white hover:text-gray-300">Contact</p>
+          <Link href="/api/auth/signout">
+            <p className="text-white hover:text-gray-300">SignOut</p>
           </Link>
         </div>
         <div className="md:hidden">

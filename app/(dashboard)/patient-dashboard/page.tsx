@@ -1,45 +1,49 @@
 import BookAppointment from "@/app/components/BookAppointment";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
-export default function PatientDashboard() {
-  const navData = ["Patient", "Doctor", "Date", "Time", "Status", "Cancel"];
-    // const firstName = "Ranjit";
+// import { getServerSession } from "next-auth";
+export default async function PatientDashboard() {
+  // const session = await getServerSession();
+
+  const navData = ["Hospital", "Doctor", "Date", "Time", "Status", "Cancel"];
+  // const firstName = "Ranjit";
   const array: Array<data> = [
     {
       key: "unique string",
-      patient: "rajveer Singh",
+      patient: "Guru Govind",
       date: "date hai",
       time: "1",
-      status: "scheduled",
+      status: "SCHEDULED",
       doctor: "Dr singh",
     },
     {
       key: "unique string",
-      patient: "rajveer Singh",
+      patient: "Guru Govind",
       date: "date hai",
       time: "12 baje",
-      status: "pending",
+      status: "PENDING",
       doctor: "Dr singh",
     },
     {
       key: "unique string",
-      patient: "rajveer Singh",
+      patient: "Guru Govind",
       date: "date hai",
       time: "12 baje",
-      status: "cancelled",
+      status: "CANCELLED",
       doctor: "Dr Abhi Singh bhadoriys is the badhf hsdh",
     },
     {
       key: "unique string",
-      patient: "rajveer Singh",
+      patient: "Guru Govind",
       date: "date hai",
       time: "12 baje",
-      status: "done",
+      status: "DONE",
       doctor: "Dr singh",
     },
   ];
   return (
     <>
+      {/* <div>{JSON.stringify(session)}</div> */}
       <div className="h-screen">
         <div className="flex  justify-end mr-3 lg:mr-8">
           <BookAppointment text={"+ Book New Appointment"} />
