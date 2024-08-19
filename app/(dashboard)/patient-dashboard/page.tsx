@@ -1,9 +1,12 @@
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import BookAppointment from "@/app/components/BookAppointment";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
+import { getServerSession } from "next-auth";
 // import { getServerSession } from "next-auth";
 export default async function PatientDashboard() {
-  // const session = await getServerSession();
+  const session = await getServerSession(options);
+  console.log(`${session?.user?.name} from patient dashboard`);
 
   const navData = ["Hospital", "Doctor", "Date", "Time", "Status", "Cancel"];
   // const firstName = "Ranjit";

@@ -1,18 +1,33 @@
+// "use client";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
+// import axios from "axios";
+// import { useSession } from "next-auth/react";
+import { options } from "./app/api/auth/[...nextauth]/options";
 const secret = process.env.NEXT_AUTH_SECRET;
 export async function middleware(req: NextRequest) {
-  // const session = await getUser();
+  // const sessionData = await getServerSession(options);
+  // console.log(sessionData?.user?.name);
   const token = await getToken({ req, secret });
-  console.log(`${JSON.stringify(token)} stringify k baad `);
+  if (token === null)
+    return NextResponse.redirect(new URL("/api/auth/signin", req.url));
+  console.log(`${token?.name} from middleware`);
 
-  console.log(`${req.nextUrl.pathname} from middleware `);
   if (req.nextUrl.pathname.startsWith("/admin-dashboard")) {
-    if (token.role != "admin") {
+    if (token != null && token.role != "admin") {
       return NextResponse.redirect(new URL("/admin-signup", req.url));
     }
   }
 }
+
+export const config = {
+  matcher: [
+    "/patient-dashboard", // Apply middleware only to admin-dashboard and protected routes
+    "/admin-dashboard", // Apply middleware only to admin-dashboard and protected routes
+    "/hospitals", // You can add more routes here as needed
+  ],
+};
 
 // import { NextResponse } from "next/server";
 // import { getToken } from "next-auth/jwt";

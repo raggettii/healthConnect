@@ -25,14 +25,17 @@ export default function dashboardLayout({
     <>
       <nav className="flex justify-between border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
         <MainLogoName />
+
+        {/* <Link href={"/api/auth/signout"}> */}
         <button
-          className=" border p-1 rounded shadow-lg"
+          className="border p-1 rounded shadow-lg"
           onClick={() => {
             signOut();
           }}
         >
           SignOut
         </button>
+        {/* </Link> */}
       </nav>
       <div className="mt-10 ">
         <div className="flex justify-between">

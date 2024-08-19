@@ -64,7 +64,7 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async redirect({ url, baseUrl }) {
       if (role1 === "admin") {
@@ -83,9 +83,9 @@ export const options: NextAuthOptions = {
         token.phoneNumber = user.phoneNumber;
         token.city = user.city;
       }
-      console.log(token.phoneNumber);
-      console.log(token);
-      console.log(user);
+      // console.log(token.phoneNumber);
+      // console.log(token);
+      // console.log(user);
       return token;
     },
     session({ session, token, user }) {
