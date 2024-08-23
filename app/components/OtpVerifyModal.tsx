@@ -1,12 +1,36 @@
+"use client";
 import ButtonComponent from "./ButtonComponent";
 import InputBox from "./InputBox";
 import Image from "next/image";
+import { PrismaClient } from "@prisma/client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useReducer } from "react";
 
 export default function OtpVerifyModal({
   closeModal,
   label,
   placeholder,
+  id,
 }: OtpVerifyModalType) {
+  const router = useRouter();
+  // on click par use delete karna hai
+  // appointment ko
+  const prisma = new PrismaClient();
+  const onClickHandler = async () => {
+    try {
+      console.log("hii from onClick inside deletion of ststua");
+      const response = await axios.post("/api/delete-appointment", {
+        appointmentId: id,
+      });
+      if (response) {
+        closeModal();
+        router.refresh();
+      }
+    } catch (error) {
+      console.error(`Error occured while deleting appointment ${error}`);
+    }
+  };
   return (
     <>
       <div
@@ -38,7 +62,7 @@ export default function OtpVerifyModal({
             onChange={() => {}}
           /> */}
           <button
-            onClick={closeModal}
+            onClick={onClickHandler}
             className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
           >
             Submit
@@ -53,4 +77,5 @@ type OtpVerifyModalType = {
   closeModal: () => void;
   label: string;
   placeholder: string;
+  id: string;
 };

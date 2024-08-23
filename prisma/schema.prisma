@@ -52,7 +52,6 @@ model Appointment {
   time String @default("NA") 
   doctor Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
-  reason String
   patient User @relation(fields: [patientId] , references: [id])
   patientId String
   hospital Hospital @relation(fields: [hospitalId] , references: [id])

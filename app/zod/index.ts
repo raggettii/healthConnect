@@ -30,8 +30,11 @@ const userSignupSchema = z.object({
 
 const scheduleAppointment = z.object({
   // const date = z.string().date(),
+  hospitalId: z.string(),
   specialization: z.string(),
-  doctorName: z.string(),
+  doctorId: z.string(),
+  userId: z.string(),
+  status: z.string(),
   date: z.string().date("Make sure its a Date"),
   time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
     message: "Make sure its valid time ",

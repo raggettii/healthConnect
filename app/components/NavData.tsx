@@ -11,9 +11,10 @@ export default function NavData({
   time,
   status,
   doctor,
-  key,
+  id,
   patient,
 }: data) {
+  console.log(id, "id from nav data");
   const pathName = usePathname();
   const actualPathname = pathName.split("-");
   const actualPathname1 = actualPathname[0];
@@ -55,6 +56,7 @@ export default function NavData({
             closeModal={onClickHandler}
             label={"Cancel Appointment"}
             placeholder={""}
+            id={id}
           />
         )}
         {isConfigModalOpen && (
@@ -62,6 +64,7 @@ export default function NavData({
             closeModal={onClickConfigHandler}
             label={"Update Status"}
             placeholder={"Description"}
+            id={id}
           />
         )}
       </div>
@@ -70,7 +73,7 @@ export default function NavData({
 }
 
 type data = {
-  key: string;
+  id: string;
   date: string;
   time: string;
   status: string;

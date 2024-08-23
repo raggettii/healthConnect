@@ -4,17 +4,27 @@ import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import Image from "next/image";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function ConfigModal({
   closeModal,
   label,
   placeholder,
+  id,
 }: ConfigModalType) {
+  const router = useRouter();
   const onSubmit = async () => {
     try {
       const response = await axios.post("/api/update-status", {
-        // here vo waala data bhejo
+        id,
+        date,
+        time,
+        selectedValue,
       });
+      if (response) {
+        closeModal();
+        router.refresh();
+      }
     } catch (error) {
       console.log(`Error occured while updating status ${error}`);
     }
@@ -75,7 +85,7 @@ export default function ConfigModal({
             onChange={onClickHandler("description")}
           />
           <InputBox
-            placeholder="dd/mm/yyyy"
+            placeholder="YYYY-MM-DD"
             label=""
             imageSource="/icons/calender.svg"
             value={date}
@@ -83,7 +93,7 @@ export default function ConfigModal({
             onChange={onClickHandler("date")}
           />
           <InputBox
-            placeholder="HH : MM"
+            placeholder="HH:MM (24 Hrs)"
             label=""
             imageSource="/icons/clock.svg"
             value={time}
@@ -107,4 +117,5 @@ type ConfigModalType = {
   closeModal: () => void;
   label: string;
   placeholder: string;
+  id: string;
 };

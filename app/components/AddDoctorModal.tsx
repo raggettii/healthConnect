@@ -35,12 +35,18 @@ export default function AddDoctorModal({
     "Psychiatry",
     "Surgery",
   ];
-  const onSubmit = async () => async () => {
-    const response = await axios.post("api/add-doctor", {
-      // yaaha aaiga dono data aur same kar denge
-    });
-    console.log("Doctor added successfully:", response.data);
-  };
+  async function onSubmit() {
+    try {
+      const response = await axios.post("/api/add-doctor", {
+        specialization: selectedValue,
+        name: doctorName,
+      });
+      console.log("Doctor added successfully:", response.data);
+      closeModal();
+    } catch (error) {
+      console.error(`Error Occured during adding Doctor ${error}`);
+    }
+  }
   return (
     <>
       <div

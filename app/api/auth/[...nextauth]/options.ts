@@ -26,7 +26,7 @@ export const options: NextAuthOptions = {
           placeholder: "Your password",
         },
       },
-      async authorize(credentials: any) {
+      async authorize(credentials) {
         // after clicking the signin button this function gets in action
         // user return statements here leads to returning actual values
         // means returning null will leads to error throuwn on frontend
@@ -38,13 +38,13 @@ export const options: NextAuthOptions = {
           !credentials?.phoneNumber ||
           !credentials?.password
         ) {
-          return null;
+          throw new Error("Complete data not provided");
         }
 
         const { role, phoneNumber, password } = credentials;
         // console.log("HERE 2 ");
-        role1 = role;
-        // console.log(role1);
+        role1 = role.toLowerCase();
+        console.log("First role", role);
         const user =
           role === "admin"
             ? await prisma.hospital.findFirst({ where: { phoneNumber } })
@@ -54,44 +54,61 @@ export const options: NextAuthOptions = {
         // console.log("HERE 3 ");
         if (!user) {
           console.log("Inside (!user) condition ");
-          return null;
+          throw new Error("Error While fetching data from server");
         }
         // console.log(user);
         // let isPasswordValid;
         // console.log(user);
-        if (password != user.password) return null;
-        else return user;
+        console.log("second role", role1);
+        if (password != user.password) throw new Error("Incorrect Password");
+        return user;
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (role1 === "admin") {
-        return `${baseUrl}/admin-dashboard`; // Redirect to admin dashboard
-      } else {
-        return `${baseUrl}/hospitals`; // Redirect to hospitals page
+    async signIn({ user, credentials }) {
+      console.log("user from signIn callback ", user);
+      if (credentials.role == "user" || credentials.role == "admin") {
+        console.log(credentials.role, "credentials role");
+        return true;
       }
+      // console.log("credentials  from signIn callback ", credentials.role);
+      return false;
     },
-    jwt({ token, user }) {
-      if (token && user) {
-        token.role = role1;
-        token.id = token.sub;
-        token.id = user.id;
-        token.name = user.fullName;
-        token.email = user.email;
-        token.phoneNumber = user.phoneNumber;
-        token.city = user.city;
+    // async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+    //   console.log(role1, "from redirect callback");
+    //   if (role1 == "admin") {
+    //     return `${baseUrl}/admin-dashboard`; // Redirect to admin dashboard
+    //   } else if (role1 == "user") {
+    //     return `${baseUrl}/hospitals`; // Redirect to hospitals page
+    //   }
+    // },
+    jwt({ token, user, session }) {
+      console.log("jwt callback ", { token, user, session });
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          name: user.fullName,
+          address: user.city,
+          role: role1,
+        };
       }
-      // console.log(token.phoneNumber);
-      // console.log(token);
-      // console.log(user);
       return token;
     },
     session({ session, token, user }) {
-      console.log(session);
-      if (session && session.user) {
-        session.user.name = token.name;
+      console.log("session callback", { session, token, user });
+      if (session) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            address: token.address,
+            id: token.id,
+            role: token.role,
+          },
+        };
       }
       return session;
     },

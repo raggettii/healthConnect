@@ -127,7 +127,7 @@ export default function AdminForm({
         hospitalName,
         emailH,
         phoneNumberH,
-        city,
+        city: city.toLowerCase(),
         password,
       });
       if (response.status === 200) {

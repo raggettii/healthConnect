@@ -2,17 +2,50 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 // import axios from "axios";
 // import { useSession } from "next-auth/react";
 import { options } from "./app/api/auth/[...nextauth]/options";
+// import { usePathname } from "next/navigation";
 const secret = process.env.NEXT_AUTH_SECRET;
 export async function middleware(req: NextRequest) {
+  const currentUrl = req.nextUrl.href;
+
+  console.log("Current URL:", currentUrl);
+
+  // You can also access other parts of the URL like pathname, search params, etc.
+  const pathname = req.nextUrl.pathname;
+  console.log(pathname);
+  const searchParams = req.nextUrl.searchParams;
+  // const heads = headers();
+  // const pathname = heads.get("next-url");
+  // const pathname = usePathname();
+  // console.log(pathname, "pathname hai bhai");
   // const sessionData = await getServerSession(options);
-  // console.log(sessionData?.user?.name);
+  // console.log(sessionData);
   const token = await getToken({ req, secret });
+  console.log(token);
+  // const token1 = token?.exp;
+  // console.log(token1);
+  if (
+    token != null &&
+    token.role == "admin" &&
+    (pathname == "/hospitals" || pathname == "/patient-dashboard")
+  ) {
+    return NextResponse.redirect(new URL("/admin-dashboard", req.url));
+  }
   if (token === null)
     return NextResponse.redirect(new URL("/api/auth/signin", req.url));
-  console.log(`${token?.name} from middleware`);
+  // console.log(token);
+  // console.log(`${token?.name} from middleware`);
+  const date: any = Date.now();
+  if (
+    token &&
+    typeof token.exp === "number" &&
+    Date.now() >= token.exp * 1000
+  ) {
+    return NextResponse.redirect(new URL("/api/auth/signin", req.url));
+  }
 
   if (req.nextUrl.pathname.startsWith("/admin-dashboard")) {
     if (token != null && token.role != "admin") {

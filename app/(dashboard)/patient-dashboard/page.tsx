@@ -3,13 +3,46 @@ import BookAppointment from "@/app/components/BookAppointment";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
 import { getServerSession } from "next-auth";
+import { PrismaClient } from "@prisma/client";
+
 // import { getServerSession } from "next-auth";
 export default async function PatientDashboard() {
+  const prisma = new PrismaClient();
   const session = await getServerSession(options);
+  const userId = session?.user.id;
+  console.log(userId, "userId of the user right now ");
   console.log(`${session?.user?.name} from patient dashboard`);
-
+  const appointments = await prisma.appointment.findMany({
+    where: {
+      patientId: userId,
+    },
+    include: {
+      doctor: {
+        select: {
+          name: true, // Include doctor's name
+        },
+      },
+      hospital: {
+        select: {
+          fullName: true, // Include hospital's name
+        },
+      },
+    },
+  });
+  console.log(appointments, "respnse after fetching appointments ");
   const navData = ["Hospital", "Doctor", "Date", "Time", "Status", "Cancel"];
   // const firstName = "Ranjit";
+  const appointmentsData = appointments.map(
+    ({ id, date, time, status, doctor, hospital }) => ({
+      id: id,
+      patient: hospital.fullName,
+      date: date,
+      time: time,
+      status,
+      doctor: doctor.name,
+    })
+  );
+  console.log(appointmentsData, "Just logging Appoinemnets dataaaaa");
   const array: Array<data> = [
     {
       key: "unique string",
@@ -58,17 +91,33 @@ export default async function PatientDashboard() {
             ))}
           </ul>
           <div className=" flex flex-col gap-4 mt-4  ">
-            {array[0] ? (
-              array.map(({ date, time, status, doctor, key, patient }) => (
-                <NavData
-                  date={date}
-                  time={time}
-                  status={status}
-                  doctor={doctor}
-                  key={key}
-                  patient={patient}
-                />
-              ))
+            {appointmentsData[0] ? (
+              appointmentsData.map(
+                ({
+                  date,
+                  time,
+                  status,
+                  doctor,
+                  id,
+                  patient,
+                }: {
+                  date: string;
+                  time: string;
+                  status: string;
+                  doctor: string;
+                  id: string;
+                  patient: string;
+                }) => (
+                  <NavData
+                    date={date}
+                    time={time}
+                    status={status}
+                    doctor={doctor}
+                    id={id}
+                    patient={patient}
+                  />
+                )
+              )
             ) : (
               <Nodata />
             )}

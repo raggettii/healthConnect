@@ -12,7 +12,7 @@ export async function POST(req: Request, res: Response) {
   try {
     const response = await prisma.hospital.create({
       data: {
-        hospitalName: hospitalName,
+        fullName: hospitalName,
         email: emailH,
         phoneNumber: phoneNumberH,
         city: city,

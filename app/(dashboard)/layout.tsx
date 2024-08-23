@@ -16,11 +16,12 @@ export default function dashboardLayout({
   children: React.ReactNode;
 }>) {
   const sessionData = useSession();
-  console.log(`${JSON.stringify(sessionData)} `);
+  // console.log(`${JSON.stringify(sessionData)} `);
+  // console.log(sessionData.data?.user?.name);
   const pathName = usePathname();
   const newPathName = pathName.split("/");
   console.log(newPathName[1]);
-  const firstName = "Guru Nanak hospitals";
+  const firstName = sessionData.data?.user?.name;
   return (
     <>
       <nav className="flex justify-between border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">

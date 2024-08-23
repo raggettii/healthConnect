@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className}h-screen  bg-[#0c4238]`}>
+      <body className={`${inter.className}h-auto  bg-[#0c4238]`}>
         <Providers>{children}</Providers>
       </body>
     </html>

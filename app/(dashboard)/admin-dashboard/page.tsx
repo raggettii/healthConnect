@@ -3,53 +3,82 @@ import ButtonComponent from "@/app/components/ButtonComponent";
 import DropDown from "@/app/components/DropDown";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
+import { NextRequest } from "next/server";
+import axios from "axios";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import { PrismaClient } from "@prisma/client";
 
-export async function adminDashboard() {
+export async function adminDashboard(req: NextRequest) {
   const prisma = new PrismaClient();
-  // const doctors = ["Rajesh", "Suresh"];
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
-  // const array = await prisma.appointment.findMany({
-  //   where: {
-  //     //patient and hospital are same
+  const sessionData = await getServerSession(options);
+  const hospitalId = sessionData?.user.id;
+  const appointments = await prisma.appointment.findMany({
+    where: {
+      hospitalId: hospitalId,
+    },
+    include: {
+      patient: {
+        select: {
+          fullName: true, // Include doctor's name
+        },
+      },
+      doctor: {
+        select: {
+          name: true, // Include hospital's name
+        },
+      },
+    },
+  });
+  const appointmentsData = appointments.map(
+    ({ id, date, time, status, doctor, patient }) => ({
+      id: id,
+      patient: patient.fullName,
+      date: date,
+      time: time,
+      status,
+      doctor: doctor.name,
+    })
+  );
+  // const array = axios.get("/api/hospital-appointments");
+  // console.log(array);
+
+  // console.log(id, "id hai bhaiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+  // const array: Array<data> = [
+  //   {
+  //     key: "unique string",
+  //     patient: "abhishake",
+  //     date: "date hai",
+  //     time: "1",
+  //     status: "PENDING",
+  //     doctor: "Dr singh",
   //   },
-  // });
-  // also need to use inside it of useEffect as when the navData changes
-  // it needs to refresh
-  const array: Array<data> = [
-    {
-      key: "unique string",
-      patient: "abhishake",
-      date: "date hai",
-      time: "1",
-      status: "DONE",
-      doctor: "Dr singh",
-    },
-    {
-      key: "unique string",
-      patient: "raamkaa",
-      date: "date hai",
-      time: "12 baje",
-      status: "PENDING",
-      doctor: "Dr singh",
-    },
-    {
-      key: "unique string",
-      patient: "raamkaa",
-      date: "date hai",
-      time: "12 baje",
-      status: "CANCELLED",
-      doctor: "Dr Abhi Singh bhadoriys is the badhf hsdh",
-    },
-    {
-      key: "unique string",
-      patient: "shubham",
-      date: "date hai",
-      time: "12 baje",
-      status: "PENDING",
-      doctor: "Dr singh",
-    },
-  ];
+  //   {
+  //     key: "unique string",
+  //     patient: "raamkaa",
+  //     date: "date hai",
+  //     time: "12 baje",
+  //     status: "PENDING",
+  //     doctor: "Dr singh",
+  //   },
+  //   {
+  //     key: "unique string",
+  //     patient: "raamkaa",
+  //     date: "date hai",
+  //     time: "12 baje",
+  //     status: "CANCELLED",
+  //     doctor: "Dr Abhi Singh bhadoriys is the badhf hsdh",
+  //   },
+  //   {
+  //     key: "unique string",
+  //     patient: "shubham",
+  //     date: "date hai",
+  //     time: "12 baje",
+  //     status: "PENDING",
+  //     doctor: "Dr singh",
+  //   },
+  // ];
   return (
     <>
       <AddDoctorButton text={"+ Add Doctor"} />
@@ -61,17 +90,19 @@ export async function adminDashboard() {
             ))}
           </ul>
           <div className=" flex flex-col gap-4 mt-4  ">
-            {array[0] ? (
-              array.map(({ patient, date, time, status, doctor, key }) => (
-                <NavData
-                  date={date}
-                  time={time}
-                  status={status}
-                  doctor={doctor}
-                  key={key}
-                  patient={patient}
-                />
-              ))
+            {appointmentsData[0] ? (
+              appointmentsData.map(
+                ({ patient, date, time, status, doctor, id }) => (
+                  <NavData
+                    date={date}
+                    time={time}
+                    status={status}
+                    doctor={doctor}
+                    id={id}
+                    patient={patient}
+                  />
+                )
+              )
             ) : (
               <Nodata />
             )}

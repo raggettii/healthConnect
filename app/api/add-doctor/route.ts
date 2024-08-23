@@ -1,19 +1,44 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
-export async function POST(req: Request) {
-  const { specialization, name }: { specialization: string; name: string } =
-    await req.json();
+import { PrismaClient, SPECIALIZATION } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+import { options } from "../auth/[...nextauth]/options";
+export async function POST(req: NextRequest, res: NextResponse) {
+  const {
+    specialization,
+    name,
+  }: { specialization: SPECIALIZATION; name: string } = await req.json();
   const prisma = new PrismaClient();
   try {
-    const addDoctor = await prisma.doctor.create({
-      data: {
-        specialization,
-        name,
-      },
-    });
-    return NextResponse.json({
-      addDoctor,
-    });
+    const tokenData = await getServerSession(options);
+    // const id = tokenData?.id;
+    console.log(tokenData, "Token data form add doctor");
+    const id = tokenData?.user.id;
+    console.log(
+      specialization,
+      name,
+      id,
+      "Data entered for adding doctorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+    );
+    try {
+      const addDoctor = await prisma.doctor.create({
+        data: {
+          name,
+          specialization,
+          hospital: {
+            connect: {
+              id: id, // You should pass the hospitalId here
+            },
+          },
+        },
+      });
+      return NextResponse.json({
+        addDoctor,
+      });
+    } catch (error) {
+      console.error(
+        `Error occured while prisma.create in adding doctor${error}`
+      );
+    }
   } catch (error) {
     console.error(`Error occured while adding doctor ${error}`);
     return NextResponse.json({
