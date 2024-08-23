@@ -243,13 +243,11 @@ export default function AppointmentBookingModal({
                   dropdownContent={dropdownContent}
                   onSelect={dropdownChangeSpe}
                 />
-                {doctorsNameArray.length > 0 && (
-                  <DropDown
-                    label={"Select Doctor"}
-                    dropdownContent={doctorsNameArray}
-                    onSelect={dropdownChangeDoc}
-                  />
-                )}
+                <DropDown
+                  label={"Select Doctor"}
+                  dropdownContent={doctorsNameArray}
+                  onSelect={dropdownChangeDoc}
+                />
               </div>
               <div className="md:flex justify-around">
                 {/* <InputBox
