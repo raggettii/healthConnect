@@ -4,13 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import useDebounce from "@/app/functions/debounce";
-// import { z } from "zod";
 import { adminSignupSchema } from "@/app/zod";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useCallback } from "react";
 import Heading from "../Heading";
 import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
-// import OtpSendButton from "../OtpSendButton";
 import validateField from "@/app/functions/validateField";
 import axios from "axios";
 
@@ -26,28 +24,17 @@ export default function AdminForm({
   const pathName = usePathname();
   const router = useRouter();
   const actualPathname = pathName.split("/");
-  console.log(actualPathname);
-  let signupurl;
-  if (actualPathname[1] === "patient-signup") {
-    signupurl = "/api/patient-signup";
-  } else signupurl = "api/admin-signup";
-  // const prisma = new PrismaClient();
+  let signupurl =
+    actualPathname[1] === "patient-signup"
+      ? "/api/patient-signup"
+      : "api/admin-signup";
 
-  // const prev: Array<String> = [];
-
-  type SetterType = React.Dispatch<React.SetStateAction<string>>;
-  type ValidatorType = (value: string) => void;
-
-  // interface SetterValidator {
-  //   setter: SetterType;
-  //   validator: ValidatorType;
-  // }
-
-  const errorMap: Map<string, string> = new Map();
-  errorMap.set("hospitalName", "");
-  errorMap.set("emailH", "");
-  errorMap.set("phoneNumberH", "");
-  errorMap.set("city", "");
+  const errorMap: Map<string, string> = new Map([
+    ["hospitalName", ""],
+    ["emailH", ""],
+    ["phoneNumberH", ""],
+    ["city", ""],
+  ]);
 
   const [hospitalName, setHospitalName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -62,43 +49,30 @@ export default function AdminForm({
   const debouncedCity = useDebounce(city, 500);
   const debouncedPassword = useDebounce(password, 500);
 
-  console.log(hospitalName);
-  console.log(emailH);
-  console.log(phoneNumberH);
-  console.log(city);
-  const validate = (field: string, value: string) => {
+  const validate = useCallback((field: string, value: string) => {
     const errorMessage: string = validateField(adminSignupSchema, field, value);
-    setErrors(errorMap.set(field, errorMessage));
-  };
+    setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
+  }, []);
 
-  const onChangeHandler =
-    (setter: SetterType, field: string) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target;
-      setter(value);
-      validate(field, value);
-    };
-  // validate k andar field means that jo map hai uski
-  // index waali value aur saath mein schema k andar
-  // item ki value bhi same hai
   React.useEffect(() => {
     validate("hospitalName", debouncedHospitalName);
-  }, [debouncedHospitalName]);
+  }, [debouncedHospitalName, validate]);
+
   React.useEffect(() => {
     validate("password", debouncedPassword);
-  }, [debouncedPassword]);
+  }, [debouncedPassword, validate]);
 
   React.useEffect(() => {
     validate("hospitalEmail", debouncedEmailH);
-  }, [debouncedEmailH]);
+  }, [debouncedEmailH, validate]);
 
   React.useEffect(() => {
     validate("phoneNumberH", debouncedPhoneNumberH);
-  }, [debouncedPhoneNumberH]);
+  }, [debouncedPhoneNumberH, validate]);
 
   React.useEffect(() => {
     validate("city", debouncedCity);
-  }, [debouncedCity]);
+  }, [debouncedCity, validate]);
 
   const onSubmit = async () => {
     const result = adminSignupSchema.safeParse({
@@ -110,7 +84,6 @@ export default function AdminForm({
     });
 
     if (!result.success) {
-      // Update the errors state with all validation errors
       const fieldErrors = new Map<string, string>();
       result.error.errors.forEach((error) => {
         if (error.path[0]) {
@@ -134,14 +107,20 @@ export default function AdminForm({
         toast.success("Post created successfully");
         router.refresh();
         router.push("/admin-dashboard");
-        console.log(`${hospitalName}Admin created successfully ${response}`);
       }
-      // console.log("Hi sbove the 409");
     } catch (error) {
-      alert("Email and PhoneNumber Sould be unique (Error:409)");
-      console.error(`Error Occured While Creating Admin ${error}`);
+      alert("Email and PhoneNumber Should be unique (Error:409)");
+      console.error(`Error Occurred While Creating Admin ${error}`);
     }
   };
+
+  const onChangeHandler =
+    (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      setter(value);
+      validate(field, value);
+    };
 
   return (
     <>
@@ -190,7 +169,6 @@ export default function AdminForm({
               onChange={onChangeHandler(setCity, "city")}
               error={errors.get("city")}
             />
-            {/* Make sure to save city as small letters and when searching by patient also search for small letters */}
             <button
               className="text-center font-bold text-lg hover:text-green-800 p-2  mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
               onClick={onSubmit}
@@ -207,7 +185,6 @@ export default function AdminForm({
             ) : (
               <div></div>
             )}
-            {/* <OtpSendButton text="Submit" phoneNumber={""} /> */}
           </div>
         </div>
       </section>

@@ -10,7 +10,7 @@ const merriWeather = Merriweather({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
-export default function dashboardLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

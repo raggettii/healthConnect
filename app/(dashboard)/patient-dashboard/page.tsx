@@ -110,6 +110,7 @@ export default async function PatientDashboard() {
                   patient: string;
                 }) => (
                   <NavData
+                    key={id}
                     date={date}
                     time={time}
                     status={status}

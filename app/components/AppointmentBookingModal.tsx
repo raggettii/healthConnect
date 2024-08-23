@@ -1,10 +1,9 @@
 "use client";
 import toast from "react-hot-toast";
-// import { PrismaClient } from "@prisma/client";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { redirect, useRouter } from "next/navigation";
-import React, { ChangeEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { ChangeEvent } from "react";
 import { scheduleAppointment } from "../zod";
 import BookAppointment from "./BookAppointment";
 import DropDown from "./DropDown";
@@ -14,6 +13,7 @@ import Image from "next/image";
 import useDebounce from "../functions/debounce";
 import validateField from "../functions/validateField";
 import { useSession } from "next-auth/react";
+
 export default function AppointmentBookingModal({
   onClickHandler,
 }: {
@@ -22,74 +22,23 @@ export default function AppointmentBookingModal({
   const session = useSession();
   const userId = session.data?.user.id;
   const [doctorId, setDoctorId] = useState("");
+  const [specialization, setSpecialization] = useState(""); // Added state for specialization
 
-  // const prisma = new PrismaClient();
   const errorsMap: Map<string, string> = new Map();
-  useEffect(() => {
-    const hospitalsData = async () => {
-      try {
-        console.log(
-          "inside the use effect of hospital api calllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
-        );
-        const response = await axios.get("/api/hospitals");
-        console.log("just after the api call");
-        // setHospitalArray(response.data);
-        console.log(response.data);
-        setHospitalArray(response.data);
-      } catch (error) {
-        console.error(`Error while fetching hospitals data ${error}`);
-      }
-    };
-    hospitalsData();
+
+  const validate = useCallback((field: string, value: string) => {
+    const errorMessage: string = validateField(
+      scheduleAppointment,
+      field,
+      value
+    );
+    setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
   }, []);
+
   const router = useRouter();
   const [hospitalId, setHospitalId] = useState<string>("");
-  useEffect(() => {
-    async function fetchDoctors() {
-      try {
-        const response = await axios.post("/api/doctors", {
-          hospitalId: hospitalId,
-        });
-        console.log(response.data, "response ka data ie doctors ka array ");
-        setDoctorsArray(response.data);
-      } catch (error) {
-        console.error(`Error occurred while fetching doctors ${error}`);
-      }
-    }
-    if (hospitalId) fetchDoctors();
-  }, [hospitalId]);
   const [hospitalsArray, setHospitalArray] = useState([]);
   const [doctorsArray, setDoctorsArray] = useState([]);
-  console.log(hospitalsArray, "hospitalsArrayyyyyyyyyyyyyyy");
-  const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
-  console.log(hospitalsNamesArray, "hospitalsnamessssssArrayyyyyyyyyyyyyyy");
-
-  const doctorsNameArray = doctorsArray.map(({ name }) => name);
-  console.log(doctorsNameArray, "doctorsNameArray hai ye ");
-  // const newHospitalsArray = hospitalsArray.map(({ fullName, id }) => ({
-  //   fullName,
-  //   id,
-  // }));
-  // console.log(newHospitalsArray, "new hospitalArrya");
-  errorsMap.set("date", "");
-  errorsMap.set("time", "");
-  const doctors = ["Rajesh", "Suresh"];
-  const dropdownContent = [
-    "Family_Medicine",
-    "Cardiology",
-    "Dermatology",
-    "Endocrinology",
-    "Gastroenterology",
-    "Neurology",
-    "Obstetrics ",
-    "Oncology",
-    "Orthopedics",
-    "Pediatrics",
-    "Psychiatry",
-    "Surgery",
-  ];
-
-  const [specialization, setSpecialization] = useState<string>("NA");
   const [hospitalName, setHospital] = useState<string>("");
   const [doctorName, setDoctorName] = useState<string>("");
   const [date, setDate] = useState<string>("");
@@ -100,15 +49,78 @@ export default function AppointmentBookingModal({
   const debouncedDate = useDebounce(date, 500);
   const debouncedTime = useDebounce(time, 500);
 
-  const validate = (field: string, value: string) => {
-    const errorMessage: string = validateField(
-      scheduleAppointment,
-      field,
-      value
-    );
+  // Fetch hospitals data
+  useEffect(() => {
+    const hospitalsData = async () => {
+      try {
+        const response = await axios.get("/api/hospitals");
+        setHospitalArray(response.data);
+      } catch (error) {
+        console.error(`Error while fetching hospitals data ${error}`);
+      }
+    };
+    hospitalsData();
+  }, []);
 
-    setErrors(errorsMap.set(field, errorMessage));
-  };
+  // Fetch doctors data when hospitalId changes
+  useEffect(() => {
+    async function fetchDoctors() {
+      try {
+        const response = await axios.post("/api/doctors", {
+          hospitalId: hospitalId,
+        });
+        setDoctorsArray(response.data);
+      } catch (error) {
+        console.error(`Error occurred while fetching doctors ${error}`);
+      }
+    }
+    if (hospitalId) fetchDoctors();
+  }, [hospitalId]);
+
+  const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
+  const doctorsNameArray = doctorsArray.map(({ name }) => name);
+
+  const dropdownContent = [
+    "Family_Medicine",
+    "Cardiology",
+    "Dermatology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Neurology",
+    "Obstetrics",
+    "Oncology",
+    "Orthopedics",
+    "Pediatrics",
+    "Psychiatry",
+    "Surgery",
+  ];
+
+  // Validate fields with debounced values
+  useEffect(() => {
+    validate("date", debouncedDate);
+  }, [debouncedDate, validate]);
+
+  useEffect(() => {
+    validate("time", debouncedTime);
+  }, [debouncedTime, validate]);
+
+  // Update hospitalId when hospitalName changes
+  useEffect(() => {
+    const hospital = hospitalsArray.find(
+      ({ fullName }) => fullName === hospitalName
+    );
+    if (hospital) {
+      setHospitalId(hospital.id);
+    }
+  }, [hospitalName, hospitalsArray]);
+
+  // Update doctorId when doctorName changes
+  useEffect(() => {
+    const doctor = doctorsArray.find(({ name }) => name === doctorName);
+    if (doctor) {
+      setDoctorId(doctor.id);
+    }
+  }, [doctorName, doctorsArray]);
 
   const onSubmit = async () => {
     const result = scheduleAppointment.safeParse({
@@ -144,78 +156,44 @@ export default function AppointmentBookingModal({
         status: "PENDING",
         time,
       });
-      console.log(response, "response from crwating the appointments ");
       if (response.status === 200) {
         toast.success("Appointment Booked successfully");
         router.refresh();
         onClickHandler();
         router.push("/patient-dashboard");
-        console.log(`${time}Status Updated successfully ${response}`);
       }
-      // console.log("Hi sbove the 409");
     } catch (error) {
-      // alert("All fields are Required (Error:400)");
-      console.error(`Error Occured While Creating Admin ${error}`);
+      console.error(`Error Occurred While Creating Appointment ${error}`);
     }
   };
 
-  console.log(debouncedDate);
-  console.log(debouncedTime);
-  console.log(specialization);
-  console.log(doctorName);
-  console.log(`${error.get("date")} date ka error`);
-
-  React.useEffect(() => {
-    validate("date", debouncedDate);
-  }, [debouncedDate]);
-  React.useEffect(() => {
-    validate("time", debouncedTime);
-  }, [debouncedTime]);
-
-  type SetterType = React.Dispatch<React.SetStateAction<string>>;
-
   const onChangeHandler =
-    (setter: SetterType, field: string) =>
+    (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setter(value);
       validate(field, value);
     };
+
   const dropdownChangeHospital = (item: string) => {
     setHospital(item);
   };
+
   const dropdownChangeSpe = (item: string) => {
-    setSpecialization(item);
+    setSpecialization(item); // Fixed specialization handling
   };
+
   const dropdownChangeDoc = (item: string) => {
     setDoctorName(item);
   };
-  useEffect(() => {
-    const hospital = hospitalsArray.find(
-      ({ fullName }) => fullName === hospitalName
-    );
-    if (hospital) {
-      setHospitalId(hospital.id);
-    }
-  }, [hospitalName, hospitalsArray]); // Re-run this effect only when hospitalName or hospitalsArray changes
-  useEffect(() => {
-    const doctor = doctorsArray.find(({ name }) => name === doctorName);
-    if (doctor) {
-      setDoctorId(doctor.id);
-    }
-  }, [doctorName, doctorsArray]); // Re-run this effect only when hospitalName or hospitalsArray changes
 
-  // const hospitalsFetched = hospitalsArray.map(({ fullName, phoneNumber }) => ({
-  //   name: fullName,
-  //   contactNumber: phoneNumber,
-  // }));
   return (
     <>
       <div
         onClick={onClickHandler}
-        className=" fixed inset-0 bg-[#0c4238] bg-opacity-60  flex justify-center items-center"
+        className="fixed inset-0 bg-[#0c4238] bg-opacity-60 flex justify-center items-center"
       >
-        <div className="flex  h-screen justify-center ">
+        <div className="flex h-screen justify-center">
           <div className="flex flex-col justify-center">
             <div
               onClick={(e) => e.stopPropagation()}
@@ -241,7 +219,7 @@ export default function AppointmentBookingModal({
                 <DropDown
                   label={"Select Specialization"}
                   dropdownContent={dropdownContent}
-                  onSelect={dropdownChangeSpe}
+                  onSelect={dropdownChangeSpe} // Fixed specialization dropdown
                 />
                 <DropDown
                   label={"Select Doctor"}
@@ -250,14 +228,6 @@ export default function AppointmentBookingModal({
                 />
               </div>
               <div className="md:flex justify-around">
-                {/* <InputBox
-                  label="Reason for Appointment"
-                  imageSource="/icons/pen.svg"
-                  placeholder="ex. Monthly Checkup"
-                  value={reason}
-                  error=""
-                  onChange={onChangeHandler("reason")}
-                /> */}
                 <InputBox
                   label="Expected Appointment Date "
                   imageSource="/icons/calender.svg"
@@ -278,7 +248,7 @@ export default function AppointmentBookingModal({
               <div className="flex justify-center">
                 <button
                   onClick={onSubmit}
-                  className=" text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] rounded-lg"
+                  className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] rounded-lg"
                 >
                   Book Appointment
                 </button>

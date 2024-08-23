@@ -95,6 +95,7 @@ export async function adminDashboard(req: NextRequest) {
               appointmentsData.map(
                 ({ patient, date, time, status, doctor, id }) => (
                   <NavData
+                    key={id}
                     date={date}
                     time={time}
                     status={status}
