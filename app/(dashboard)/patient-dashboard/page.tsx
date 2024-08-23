@@ -34,6 +34,7 @@ export default async function PatientDashboard() {
   // const firstName = "Ranjit";
   const appointmentsData = appointments.map(
     ({ id, date, time, status, doctor, hospital }) => ({
+      key: id,
       id: id,
       patient: hospital.fullName,
       date: date,

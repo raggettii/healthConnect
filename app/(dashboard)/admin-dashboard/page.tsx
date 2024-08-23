@@ -33,6 +33,7 @@ export async function adminDashboard(req: NextRequest) {
   });
   const appointmentsData = appointments.map(
     ({ id, date, time, status, doctor, patient }) => ({
+      key: id,
       id: id,
       patient: patient.fullName,
       date: date,
