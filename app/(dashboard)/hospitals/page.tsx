@@ -2,10 +2,10 @@ import HospitalComponent from "@/app/components/HospitalComponent";
 import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
+// import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-export default async function Hospitals(req: NextRequest) {
+export default async function Hospitals() {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getServerSession(options);
   console.log("token from hospitals page ", token);
