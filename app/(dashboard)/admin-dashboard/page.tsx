@@ -3,13 +3,13 @@ import ButtonComponent from "@/app/components/ButtonComponent";
 import DropDown from "@/app/components/DropDown";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
-import { NextRequest } from "next/server";
+// import { NextRequest } from "next/server";
 import axios from "axios";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { PrismaClient } from "@prisma/client";
 
-export default async function AdminDashboard(req: NextRequest) {
+export default async function AdminDashboard() {
   const prisma = new PrismaClient();
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
   const sessionData = await getServerSession(options);
