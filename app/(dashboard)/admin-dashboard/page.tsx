@@ -9,7 +9,7 @@ import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { PrismaClient } from "@prisma/client";
 
-export async function AdminDashboard(req: NextRequest) {
+export default async function AdminDashboard(req: NextRequest) {
   const prisma = new PrismaClient();
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
   const sessionData = await getServerSession(options);
@@ -123,4 +123,4 @@ type data = {
   patient: string;
 };
 
-export default adminDashboard;
+// export default adminDashboard;
