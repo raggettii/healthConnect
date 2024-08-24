@@ -16,6 +16,7 @@ const OtpSendButton: React.FC<ButtonComponentProps> = ({
     <>
       {isModalOpen && (
         <OtpVerifyModal
+          id=""
           closeModal={handleOpenModel}
           label="Enter OTP"
           placeholder="Enter OTP"

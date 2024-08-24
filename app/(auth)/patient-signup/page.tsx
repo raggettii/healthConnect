@@ -1,6 +1,6 @@
 import AdminForm from "@/app/components/forms/AdminForm";
 // import PatientForm from "@/app/components/forms/PatientForm";
-export default function patientAuth() {
+export default function PatientAuth() {
   return (
     <>
       <AdminForm

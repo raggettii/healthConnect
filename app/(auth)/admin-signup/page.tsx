@@ -1,6 +1,6 @@
 import AdminForm from "@/app/components/forms/AdminForm";
 
-export default function adminAuth() {
+export default function AdminAuth() {
   return (
     <>
       <AdminForm
