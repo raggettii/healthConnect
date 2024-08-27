@@ -41,11 +41,11 @@ export const options: NextAuthOptions = {
           throw new Error("Complete data not provided");
         }
 
-        const { role, phoneNumber, password } = credentials;
+        const { role, phoneNumber, password } = credentials as CredentialsType;
         // console.log("HERE 2 ");
         role1 = role.toLowerCase();
         console.log("First role", role);
-        const user =
+        const user: UserType =
           role === "admin"
             ? await prisma.hospital.findFirst({ where: { phoneNumber } })
             : await prisma.user.findFirst({ where: { phoneNumber } });
@@ -68,9 +68,13 @@ export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, credentials }) {
+      const typedCredentials = credentials as CredentialsType | undefined;
       console.log("user from signIn callback ", user);
-      if (credentials.role == "user" || credentials.role == "admin") {
-        console.log(credentials.role, "credentials role");
+      if (
+        typedCredentials != undefined &&
+        (typedCredentials.role == "user" || typedCredentials.role == "admin")
+      ) {
+        console.log(typedCredentials.role, "typedCredentials role");
         return true;
       }
       // console.log("credentials  from signIn callback ", credentials.role);
@@ -85,13 +89,14 @@ export const options: NextAuthOptions = {
     //   }
     // },
     jwt({ token, user, session }) {
+      const userInJWT = user as UserType;
       console.log("jwt callback ", { token, user, session });
-      if (user) {
+      if (userInJWT) {
         return {
           ...token,
-          id: user.id,
-          name: user.fullName,
-          address: user.city,
+          id: userInJWT.id,
+          name: userInJWT.fullName,
+          address: userInJWT.city,
           role: role1,
         };
       }
@@ -113,4 +118,17 @@ export const options: NextAuthOptions = {
       return session;
     },
   },
+};
+type UserType = {
+  id: string;
+  fullName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  city: string;
+} | null;
+type CredentialsType = {
+  role: "admin" | "user";
+  password: string;
+  phoneNumber: string;
 };

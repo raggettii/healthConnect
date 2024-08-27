@@ -78,6 +78,10 @@ export default function AppointmentBookingModal({
   }, [hospitalId]);
 
   const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
+  console.log(
+    doctorsArray,
+    "logging fetched doctor data in appointment booking modal "
+  );
   const doctorsNameArray = doctorsArray.map(({ name }) => name);
 
   const dropdownContent = [
@@ -110,7 +114,8 @@ export default function AppointmentBookingModal({
       ({ fullName }) => fullName === hospitalName
     );
     if (hospital) {
-      setHospitalId(hospital.id);
+      const hospitalData = hospital as hospitalDataType;
+      setHospitalId(hospitalData.id);
     }
   }, [hospitalName, hospitalsArray]);
 
@@ -118,7 +123,8 @@ export default function AppointmentBookingModal({
   useEffect(() => {
     const doctor = doctorsArray.find(({ name }) => name === doctorName);
     if (doctor) {
-      setDoctorId(doctor.id);
+      const doctorData = doctor as doctorDataType;
+      setDoctorId(doctorData.id);
     }
   }, [doctorName, doctorsArray]);
 
@@ -137,7 +143,7 @@ export default function AppointmentBookingModal({
       // Update the errors state with all validation errors
       const fieldErrors = new Map<string, string>();
       result.error.errors.forEach((error) => {
-        if (error.path[0]) {
+        if (typeof error.path[0] === "string") {
           fieldErrors.set(error.path[0], error.message);
         }
       });
@@ -260,3 +266,17 @@ export default function AppointmentBookingModal({
     </>
   );
 }
+type hospitalDataType = {
+  id: string;
+  fullName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  city: string;
+};
+type doctorDataType = {
+  id: string;
+  name: string;
+  specialization: string;
+  hospitalId: string;
+};

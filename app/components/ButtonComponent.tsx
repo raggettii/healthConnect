@@ -12,6 +12,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({ text }) => {
     <>
       {isModalOpen && (
         <OtpVerifyModal
+          id=""
           closeModal={handleOpenModel}
           label="Enter OTP"
           placeholder="Enter OTP"

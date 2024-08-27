@@ -86,7 +86,7 @@ export default function AdminForm({
     if (!result.success) {
       const fieldErrors = new Map<string, string>();
       result.error.errors.forEach((error) => {
-        if (error.path[0]) {
+        if (typeof error.path[0] === "string") {
           fieldErrors.set(error.path[0], error.message);
         }
       });
