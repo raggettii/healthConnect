@@ -11,6 +11,7 @@ import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
 import validateField from "@/app/functions/validateField";
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 export default function AdminForm({
   name,
@@ -109,8 +110,12 @@ export default function AdminForm({
         router.push("/admin-dashboard");
       }
     } catch (error) {
-      alert("Email and PhoneNumber Should be unique (Error:409)");
+      alert("Error Occurred While Creating Admin");
       console.error(`Error Occurred While Creating Admin ${error}`);
+      return NextResponse.json(
+        { error: "Error Occurred While Creating Admin" },
+        { status: 500 }
+      );
     }
   };
 

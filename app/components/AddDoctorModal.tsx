@@ -5,6 +5,7 @@ import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import Image from "next/image";
 import axios from "axios";
+import { NextResponse } from "next/server";
 
 export default function AddDoctorModal({
   closeModal,
@@ -46,6 +47,10 @@ export default function AddDoctorModal({
       closeModal();
     } catch (error) {
       console.error(`Error Occured during adding Doctor ${error}`);
+      return NextResponse.json(
+        { error: "Error Occured during adding Doctor" },
+        { status: 500 }
+      );
     }
   }
   return (

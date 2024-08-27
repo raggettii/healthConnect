@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useReducer } from "react";
+import { NextResponse } from "next/server";
 
 export default function OtpVerifyModal({
   closeModal,
@@ -29,6 +30,10 @@ export default function OtpVerifyModal({
       }
     } catch (error) {
       console.error(`Error occured while deleting appointment ${error}`);
+      return NextResponse.json(
+        { error: "Error occured while deleting appointment" },
+        { status: 500 }
+      );
     }
   };
   return (

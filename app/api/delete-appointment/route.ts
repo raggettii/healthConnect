@@ -14,5 +14,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error(`Error occured while deleting appointment ${error}`);
+    return NextResponse.json(
+      { error: "Error occured while deleting appointment" },
+      { status: 500 }
+    );
   }
 }

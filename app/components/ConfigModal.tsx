@@ -5,6 +5,7 @@ import InputBox from "./InputBox";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { NextResponse } from "next/server";
 
 export default function ConfigModal({
   closeModal,
@@ -27,6 +28,10 @@ export default function ConfigModal({
       }
     } catch (error) {
       console.log(`Error occured while updating status ${error}`);
+      return NextResponse.json(
+        { error: "Error occured while updating status" },
+        { status: 500 }
+      );
     }
   };
   const [selectedValue, setSelectedValue] = useState<string>("");

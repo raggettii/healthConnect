@@ -26,5 +26,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(updatedStatus);
   } catch (error) {
     console.error(`Error occured while updating status ${error}`);
+    return NextResponse.json(
+      { error: "Error occured while updating status " },
+      { status: 500 }
+    );
   }
 }

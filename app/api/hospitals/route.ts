@@ -17,5 +17,9 @@ export async function GET() {
     return NextResponse.json(response);
   } catch (error) {
     console.error(`Error occured while fetching hospitals ${error}`);
+    return NextResponse.json(
+      { error: "Error occured while fetching hospitals" },
+      { status: 500 }
+    );
   }
 }

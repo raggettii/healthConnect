@@ -16,5 +16,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(doctors);
   } catch (error) {
     console.error(`Error occured while fetching doctors ${error}`);
+    return NextResponse.json(
+      { error: "Error occured while fetching doctors" },
+      { status: 500 }
+    );
   }
 }

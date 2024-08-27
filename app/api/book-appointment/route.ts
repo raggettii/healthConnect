@@ -44,5 +44,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error(`Error while booking appointment ${error}`);
+    return NextResponse.json(
+      { error: "Error while booking appointment" },
+      { status: 500 }
+    );
   }
 }

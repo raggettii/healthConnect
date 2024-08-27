@@ -13,6 +13,7 @@ import Image from "next/image";
 import useDebounce from "../functions/debounce";
 import validateField from "../functions/validateField";
 import { useSession } from "next-auth/react";
+import { NextResponse } from "next/server";
 
 export default function AppointmentBookingModal({
   onClickHandler,
@@ -57,6 +58,10 @@ export default function AppointmentBookingModal({
         setHospitalArray(response.data);
       } catch (error) {
         console.error(`Error while fetching hospitals data ${error}`);
+        return NextResponse.json(
+          { error: "Error while fetching hospitals data" },
+          { status: 500 }
+        );
       }
     };
     hospitalsData();
@@ -72,6 +77,10 @@ export default function AppointmentBookingModal({
         setDoctorsArray(response.data);
       } catch (error) {
         console.error(`Error occurred while fetching doctors ${error}`);
+        return NextResponse.json(
+          { error: "Error occurred while fetching doctors" },
+          { status: 500 }
+        );
       }
     }
     if (hospitalId) fetchDoctors();
@@ -170,6 +179,10 @@ export default function AppointmentBookingModal({
       }
     } catch (error) {
       console.error(`Error Occurred While Creating Appointment ${error}`);
+      return NextResponse.json(
+        { error: "Error Occurred While Creating Appointment" },
+        { status: 500 }
+      );
     }
   };
 
