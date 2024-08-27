@@ -22,13 +22,14 @@ export default function AddDoctorModal({
   console.log(doctorName);
   console.log(selectedValue);
   const dropdownContent = [
-    "Family Medicine",
+    "NA",
+    "Family_Medicine",
     "Cardiology",
     "Dermatology",
     "Endocrinology",
     "Gastroenterology",
     "Neurology",
-    "Obstetrics ",
+    "Obstetrics",
     "Oncology",
     "Orthopedics",
     "Pediatrics",

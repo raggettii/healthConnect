@@ -19,30 +19,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
       id,
       "Data entered for adding doctorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
     );
-    try {
-      const addDoctor = await prisma.doctor.create({
-        data: {
-          name,
-          specialization,
-          hospital: {
-            connect: {
-              id: id, // You should pass the hospitalId here
-            },
+    const addDoctor = await prisma.doctor.create({
+      data: {
+        name,
+        specialization,
+        hospital: {
+          connect: {
+            id: id, // You should pass the hospitalId here
           },
         },
-      });
-      return NextResponse.json({
-        addDoctor,
-      });
-    } catch (error) {
-      console.error(
-        `Error occured while prisma.create in adding doctor${error}`
-      );
-    }
+      },
+    });
+    return NextResponse.json({
+      addDoctor,
+    });
   } catch (error) {
     console.error(`Error occured while adding doctor ${error}`);
-    return NextResponse.json({
-      error,
-    });
+    // return NextResponse.json({
+    //   error,
+    // });
   }
 }

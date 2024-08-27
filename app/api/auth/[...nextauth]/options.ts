@@ -52,7 +52,9 @@ export const options: NextAuthOptions = {
 
         // console.log(user);
         // console.log("HERE 3 ");
+        console.log(user, "before !user logging user");
         if (!user) {
+          console.log(user, "inside !user logging user");
           console.log("Inside (!user) condition ");
           throw new Error("Error While fetching data from server");
         }
@@ -77,7 +79,7 @@ export const options: NextAuthOptions = {
         console.log(typedCredentials.role, "typedCredentials role");
         return true;
       }
-      // console.log("credentials  from signIn callback ", credentials.role);
+      // console.log("credentials  from signIn callback ", typedCredentials.role);
       return false;
     },
     // async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
