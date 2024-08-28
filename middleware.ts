@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
 
   // You can also access other parts of the URL like pathname, search params, etc.
   const pathname = req.nextUrl.pathname;
-  console.log(pathname);
+  console.log("Here is the pathname from middleware ", pathname);
   const searchParams = req.nextUrl.searchParams;
   // const heads = headers();
   // const pathname = heads.get("next-url");
@@ -24,7 +24,7 @@ export async function middleware(req: NextRequest) {
   // const sessionData = await getServerSession(options);
   // console.log(sessionData);
   const token = await getToken({ req, secret });
-  console.log(token);
+  console.log("token logging from middleware.ts", token);
   // const token1 = token?.exp;
   // console.log(token1);
   if (
