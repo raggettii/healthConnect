@@ -9,6 +9,8 @@ import { options } from "./app/api/auth/[...nextauth]/options";
 // import { usePathname } from "next/navigation";
 const secret = process.env.NEXT_AUTH_SECRET;
 export async function middleware(req: NextRequest) {
+  console.log("Request Headers:", req.headers);
+  console.log("Cookies:", req.cookies.getAll());
   const currentUrl = req.nextUrl.href;
 
   console.log("Current URL:", currentUrl);

@@ -40,10 +40,11 @@ export const options: NextAuthOptions = {
         ) {
           throw new Error("Complete data not provided");
         }
-
-        const { role, phoneNumber, password } = credentials as CredentialsType;
+        const role = (credentials.role as string).toLowerCase();
+        console.log(`after lowercase the role is ${role}`);
+        const { phoneNumber, password } = credentials as CredentialsType;
         // console.log("HERE 2 ");
-        role1 = role.toLowerCase();
+        role1 = role;
         console.log("First role", role);
         const user: UserType =
           role === "admin"
@@ -71,13 +72,16 @@ export const options: NextAuthOptions = {
   callbacks: {
     async signIn({ user, credentials }) {
       const typedCredentials = credentials as CredentialsType | undefined;
+
       console.log("user from signIn callback ", user);
-      if (
-        typedCredentials != undefined &&
-        (typedCredentials.role == "user" || typedCredentials.role == "admin")
-      ) {
-        console.log(typedCredentials.role, "typedCredentials role");
-        return true;
+      if (typedCredentials != undefined) {
+        const role = typedCredentials.role.toLowerCase();
+        console.log("role from signIn callback ", role);
+
+        if (role == "user" || role == "admin") {
+          console.log(role, "typedCredentials role");
+          return true;
+        }
       }
       // console.log("credentials  from signIn callback ", typedCredentials.role);
       return false;

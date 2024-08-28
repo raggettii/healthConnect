@@ -123,7 +123,9 @@ export default function AdminForm({
     (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
-      setter(value);
+      if (setter.toString() === "setCity") {
+        setter(value.toLowerCase());
+      } else setter(value);
       validate(field, value);
     };
 
