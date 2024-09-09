@@ -22,6 +22,7 @@ export default function SignUpForm({
   namePlaceholder: string;
   emailPlaceholder: string;
 }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const pathName = usePathname();
   const router = useRouter();
   const actualPathname = pathName.split("/");
@@ -76,7 +77,9 @@ export default function SignUpForm({
   //   validate("city", debouncedCity);
   // }, [debouncedCity, validate]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsSubmitting(true);
     const result = signupSchema.safeParse({
       hospitalName,
       hospitalEmail: emailH,
@@ -92,6 +95,7 @@ export default function SignUpForm({
           fieldErrors.set(error.path[0], error.message);
         }
       });
+      setIsSubmitting(false);
       setErrors(fieldErrors);
       toast.error("Please fix the errors before submitting");
       return;
@@ -106,9 +110,9 @@ export default function SignUpForm({
         password,
       });
       if (response.status === 200) {
-        toast.success("Post created successfully");
-        router.refresh();
+        toast.success("Form submitted successfully");
         router.push(afterSignupUrl);
+        // router.refresh();
       }
     } catch (error) {
       alert("Error Occurred While Signing up");
@@ -117,6 +121,8 @@ export default function SignUpForm({
         { error: "Error Occurred While Signing up" },
         { status: 500 }
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,7 +143,7 @@ export default function SignUpForm({
           <div className="flex flex-col gap-2 p-5 border-2 border-gray-400 rounded-lg shadow-lg">
             <Heading text={"Hii there..."} />
             <SubHeading text={"Get started with Appointments"} />
-            <form action="" onSubmit={onSubmit}>
+            <form action="">
               <InputBox
                 type="text"
                 required={true}
@@ -189,8 +195,9 @@ export default function SignUpForm({
                 error={errors.get("city")}
               />
               <button
+                disabled={isSubmitting}
                 type="submit"
-                className="text-center font-bold text-lg hover:text-green-800 p-2  mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
+                className="disabled:bg-gray-500 disabled:text-white text-center font-bold text-lg hover:text-green-800 p-2  mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
                 onClick={onSubmit}
               >
                 Submit
