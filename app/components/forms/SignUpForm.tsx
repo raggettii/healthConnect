@@ -29,8 +29,7 @@ export default function SignUpForm({
     actualPathname[1] === "patient-signup"
       ? "/api/patient-signup"
       : "api/admin-signup";
-  let afterSignupUrl =
-    actualPathname[1] === "patient-signup" ? "/hospitals" : "/admin-dashboard";
+  const afterSignupUrl = "/api/auth/signin";
 
   const errorMap: Map<string, string> = new Map([
     ["hospitalName", ""],
