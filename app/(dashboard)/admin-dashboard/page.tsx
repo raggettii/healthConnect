@@ -83,7 +83,7 @@ export default async function AdminDashboard() {
   return (
     <>
       <AddDoctorButton text={"+ Add Doctor"} />
-      <div className="h-screen">
+      <div className="max-h-full min-h-[678px]">
         <nav className="lg:ml-[240px] lg:mr-[240px] md:ml-[100px] md:mr-[100px] font-semibold md:text-lg  mt-12  ml-2 mr-2 p-2 rounded-t-xl bg-[#0b2b1c] h-[40px] ">
           <ul className="flex justify-between px-2">
             {navData.map((item, index) => (
@@ -106,7 +106,7 @@ export default async function AdminDashboard() {
                 )
               )
             ) : (
-              <Nodata />
+              <Nodata text="No Appointments available" />
             )}
           </div>
         </nav>

@@ -5,6 +5,7 @@ import { getToken } from "next-auth/jwt";
 // import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
+import Nodata from "@/app/components/Nodata";
 export default async function Hospitals() {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getServerSession(options);
@@ -39,7 +40,7 @@ export default async function Hospitals() {
   ];
   return (
     <>
-      <div className="h-screen">
+      <div className="max-h-full min-h-[678px]">
         <Link
           className="mb-4 flex justify-end md:pr-14 pr-4"
           href={"/patient-dashboard"}
@@ -48,13 +49,17 @@ export default async function Hospitals() {
             Your Appointments
           </h1>
         </Link>
-        {hospitalsFetched.map((item, index) => (
-          <HospitalComponent
-            key={index}
-            name={item.name}
-            city={item.contactNumber}
-          />
-        ))}
+        {hospitalsFetched.length > 0 ? (
+          hospitalsFetched.map((item, index) => (
+            <HospitalComponent
+              key={index}
+              name={item.name}
+              city={item.contactNumber}
+            />
+          ))
+        ) : (
+          <Nodata text="No hospitals are registered from your City"></Nodata>
+        )}
       </div>
     </>
   );

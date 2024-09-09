@@ -81,7 +81,7 @@ export default async function PatientDashboard() {
   return (
     <>
       {/* <div>{JSON.stringify(session)}</div> */}
-      <div className="h-screen">
+      <div className="max-h-full min-h-[678px]">
         <div className="flex  justify-end mr-3 lg:mr-8">
           <BookAppointment text={"+ Book New Appointment"} />
         </div>
@@ -121,7 +121,7 @@ export default async function PatientDashboard() {
                 )
               )
             ) : (
-              <Nodata />
+              <Nodata text="No Appointments available" />
             )}
           </div>
         </nav>

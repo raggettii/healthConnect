@@ -1,13 +1,15 @@
-import AdminForm from "@/app/components/forms/AdminForm";
+import SignUpForm from "@/app/components/forms/SignUpForm";
 // import PatientForm from "@/app/components/forms/PatientForm";
 export default function PatientAuth() {
   return (
     <>
-      <AdminForm
-        name={"First Name"}
-        namePlaceholder={"John Doe"}
-        emailPlaceholder={"johndoe@gmail.com"}
-      />
+      <div className="max-h-full min-h-[678px]">
+        <SignUpForm
+          name={"First Name"}
+          namePlaceholder={"John Doe"}
+          emailPlaceholder={"johndoe@gmail.com"}
+        />
+      </div>
     </>
   );
 }

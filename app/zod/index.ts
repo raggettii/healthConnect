@@ -1,12 +1,11 @@
 import { z } from "zod";
 
-const adminSignupSchema = z.object({
+const signupSchema = z.object({
   hospitalName: z.string().nonempty({ message: "Field is Required" }),
   hospitalEmail: z.string().nonempty({ message: "Field is Required" }).email(),
   phoneNumberH: z
     .string()
-    .max(16, "Maximum Length Exceeded ")
-    .nonempty({ message: "Field is Required" }),
+    .regex(/^\+91\d{10}$/, { message: "Invalid phone number format." }),
   city: z.string().nonempty({ message: "Field is Required" }),
   password: z
     .string()
@@ -30,9 +29,9 @@ const userSignupSchema = z.object({
 
 const scheduleAppointment = z.object({
   // const date = z.string().date(),
-  hospitalId: z.string(),
-  specialization: z.string(),
-  doctorId: z.string(),
+  hospitalId: z.string({ message: "Please select Hospital" }),
+  specialization: z.string({ message: "Please select Specialization" }),
+  doctorId: z.string({ message: "Please select Doctor" }),
   userId: z.string(),
   status: z.string(),
   date: z.string().date("Make sure its a Date"),
@@ -41,4 +40,18 @@ const scheduleAppointment = z.object({
   }),
 });
 
-export { adminSignupSchema, userSignupSchema, scheduleAppointment };
+const updateStatusSchema = z.object({
+  selectedValue: z.string(),
+  // description: z.string(),
+  date: z.string().date("Make sure its a Date"),
+  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: "Make sure its valid time ",
+  }),
+});
+
+export {
+  updateStatusSchema,
+  signupSchema,
+  userSignupSchema,
+  scheduleAppointment,
+};
