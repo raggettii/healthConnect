@@ -16,60 +16,60 @@ datasource db {
 }
         
 
-model User{
+model  HealthConnect_User{
   id String @id @default(uuid())
   fullName String 
   email String @unique
   password String
   phoneNumber String @unique
   city String
-  appointment Appointment[]
+  appointment HealthConnect_Appointment[]
 } 
-model Hospital{
+model  HealthConnect_Hospital{
   id String @id @default(uuid())
   fullName String @unique
   email String @unique
   password String 
   phoneNumber String @unique
   city String
-  appointments Appointment[]
-  doctors Doctor[]
+  appointments HealthConnect_Appointment[]
+  doctors HealthConnect_Doctor[]
 }
 
-model Doctor {
+model  HealthConnect_Doctor {
   id String @id @default(uuid())
   name String
-  specialization SPECIALIZATION @default(NA)
-  appointments Appointment[]
-  hospital Hospital @relation(fields: [hospitalId] , references: [id])
+  specialization HEALTHCONNECT_SPECIALIZATION @default(NA)
+  appointments HealthConnect_Appointment[]
+  hospital HealthConnect_Hospital @relation(fields: [hospitalId] , references: [id])
   hospitalId String
 }
 
-model Appointment {
+model  HealthConnect_Appointment {
   id String @id @default(uuid())
-  doctorSpecialization SPECIALIZATION @default(NA)
+  doctorSpecialization HEALTHCONNECT_SPECIALIZATION @default(NA)
   date String 
   time String @default("NA") 
-  doctor Doctor @relation(fields: [doctorId], references: [id])
+  doctor HealthConnect_Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
-  patient User @relation(fields: [patientId] , references: [id])
+  patient HealthConnect_User @relation(fields: [patientId] , references: [id])
   patientId String
-  hospital Hospital @relation(fields: [hospitalId] , references: [id])
+  hospital HealthConnect_Hospital @relation(fields: [hospitalId] , references: [id])
   hospitalId String
-  status STATUS @default(PENDING)
+  status HEALTHCONNECT_STATUS @default(PENDING)
 }
 // update and cancelled status will work as 
 // when update status button clicked from 
 // fe just search for the same appointment and 
 // dot karke status par jaake usko update kar denge 
-enum STATUS {
+enum HEALTHCONNECT_STATUS {
   SCHEDULED
   PENDING
   CANCELLED
   DONE
 }
 
-enum SPECIALIZATION{
+enum HEALTHCONNECT_SPECIALIZATION{
     NA
     Family_Medicine
     Cardiology
