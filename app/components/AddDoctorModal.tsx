@@ -6,12 +6,14 @@ import InputBox from "./InputBox";
 import Image from "next/image";
 import axios from "axios";
 import { NextResponse } from "next/server";
+import toast from "react-hot-toast";
 
 export default function AddDoctorModal({
   closeModal,
   label,
   placeholder,
 }: AddDoctorModalType) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<string>("");
   const handleDropdownChange = (item: string) => {
     setSelectedValue(item);
@@ -38,19 +40,24 @@ export default function AddDoctorModal({
     "Surgery",
   ];
   async function onSubmit() {
+    setIsSubmitting(true);
     try {
       const response = await axios.post("/api/add-doctor", {
         specialization: selectedValue,
         name: doctorName,
       });
+      toast.success("Doctor added Successfully");
       console.log("Doctor added successfully:", response.data);
       closeModal();
     } catch (error) {
+      toast.error("All fields are required");
       console.error(`Error Occured during adding Doctor ${error}`);
       return NextResponse.json(
         { error: "Error Occured during adding Doctor" },
         { status: 500 }
       );
+    } finally {
+      setIsSubmitting(false);
     }
   }
   return (
@@ -77,12 +84,15 @@ export default function AddDoctorModal({
           </h2>
           <div className="ml-4">
             <DropDown
+              noDropdownDataText=""
               label="Select Specilization"
               dropdownContent={dropdownContent}
               onSelect={handleDropdownChange}
             />
           </div>
           <InputBox
+            type="text"
+            required={true}
             placeholder={placeholder}
             label=""
             imageSource="/icons/otp.svg"
@@ -92,7 +102,8 @@ export default function AddDoctorModal({
           />
           <button
             onClick={onSubmit}
-            className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
+            disabled={isSubmitting}
+            className="disabled:bg-gray-300 disabled:hover:text-gray-500 text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
           >
             Submit
           </button>

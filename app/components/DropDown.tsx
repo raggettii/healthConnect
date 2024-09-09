@@ -5,10 +5,12 @@ export default function DropDown({
   label,
   dropdownContent,
   onSelect,
+  noDropdownDataText,
 }: {
   label: string;
   dropdownContent: Array<string>;
   onSelect: (item: string) => void;
+  noDropdownDataText: string;
 }) {
   const [dropdownHeader, setDropdownHeader] = useState<string>(label);
   const headerChange = (item: string) => {
@@ -48,15 +50,19 @@ export default function DropDown({
             className="relative bg-[#3d3d3d] rounded-lg p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {dropdownContent.map((item, index) => (
-              <div
-                onClick={() => togglerAndHeader(item)}
-                className="cursor-pointer pl-1 ml-2 border-b rounded-sm w-[180px] bg-[#313131] hover:bg-slate-500"
-                key={index}
-              >
-                {item}
-              </div>
-            ))}
+            {dropdownContent.length > 0 ? (
+              dropdownContent.map((item, index) => (
+                <div
+                  onClick={() => togglerAndHeader(item)}
+                  className="cursor-pointer pl-1 ml-2 border-b rounded-sm w-[180px] bg-[#313131] hover:bg-slate-500"
+                  key={index}
+                >
+                  {item}
+                </div>
+              ))
+            ) : (
+              <>{noDropdownDataText}</>
+            )}
           </div>
         </div>
       )}

@@ -6,6 +6,8 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { NextResponse } from "next/server";
+import toast from "react-hot-toast";
+import { updateStatusSchema } from "../zod";
 
 export default function ConfigModal({
   closeModal,
@@ -13,8 +15,22 @@ export default function ConfigModal({
   placeholder,
   id,
 }: ConfigModalType) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const onSubmit = async () => {
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    const formData = {
+      date,
+      time,
+      selectedValue,
+    };
+    const response = updateStatusSchema.safeParse(formData);
+    if (!response.success) {
+      response.error.errors.map((error) => toast.error(error.message));
+      setIsSubmitting(false);
+      return;
+    }
     try {
       const response = await axios.post("/api/update-status", {
         id,
@@ -23,6 +39,12 @@ export default function ConfigModal({
         selectedValue,
       });
       if (response) {
+        console.log(
+          "HEYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+          response
+        );
+        toast.success("Status updated successfully ");
+        setIsSubmitting(false);
         closeModal();
         router.refresh();
       }
@@ -32,6 +54,8 @@ export default function ConfigModal({
         { error: "Error occured while updating status" },
         { status: 500 }
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -76,41 +100,52 @@ export default function ConfigModal({
           </h2>
           <div className="ml-4">
             <DropDown
+              noDropdownDataText=""
               label="Select Status"
               dropdownContent={dropdownContent}
               onSelect={dropdownChange}
             />
           </div>
-          <InputBox
-            placeholder={placeholder}
-            label=""
-            imageSource="/icons/otp.svg"
-            value={description}
-            error=""
-            onChange={onClickHandler("description")}
-          />
-          <InputBox
-            placeholder="YYYY-MM-DD"
-            label=""
-            imageSource="/icons/calender.svg"
-            value={date}
-            error=""
-            onChange={onClickHandler("date")}
-          />
-          <InputBox
-            placeholder="HH:MM (24 Hrs)"
-            label=""
-            imageSource="/icons/clock.svg"
-            value={time}
-            error=""
-            onChange={onClickHandler("time")}
-          />
-          <button
-            onClick={onSubmit}
-            className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
-          >
-            Submit
-          </button>
+          <form action="" onSubmit={onSubmit}>
+            <InputBox
+              type="text"
+              required={true}
+              placeholder={placeholder}
+              label=""
+              imageSource="/icons/otp.svg"
+              value={description}
+              error=""
+              onChange={onClickHandler("description")}
+            />
+            <InputBox
+              type="text"
+              required={true}
+              placeholder="YYYY-MM-DD"
+              label=""
+              imageSource="/icons/calender.svg"
+              value={date}
+              error=""
+              onChange={onClickHandler("date")}
+            />
+            <InputBox
+              type="text"
+              required={true}
+              placeholder="HH:MM (24 Hrs)"
+              label=""
+              imageSource="/icons/clock.svg"
+              value={time}
+              error=""
+              onChange={onClickHandler("time")}
+            />
+            <button
+              // onClick={onSubmit}
+              type="submit"
+              disabled={isSubmitting}
+              className=" disabled:bg-gray-500 disabled:text-white text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
+            >
+              Submit
+            </button>
+          </form>
           {/* Isi button k click par otp bhejne ka logic  */}
         </div>
       </div>

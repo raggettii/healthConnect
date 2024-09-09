@@ -8,8 +8,8 @@ const oswald = Oswald({
 export default function MainLogoName() {
   return (
     <>
-      <Link href={"/"}>
-        <div className="flex h-10">
+      <div>
+        <Link href={"/"} className="flex">
           <Image
             className="rounded-3xl"
             src={"/icons/logo (1).svg"}
@@ -22,8 +22,8 @@ export default function MainLogoName() {
           >
             HealthConnect
           </h1>
-        </div>
-      </Link>
+        </Link>
+      </div>
     </>
   );
 }

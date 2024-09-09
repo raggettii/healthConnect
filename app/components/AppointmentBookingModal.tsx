@@ -5,12 +5,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent } from "react";
 import { scheduleAppointment } from "../zod";
-import BookAppointment from "./BookAppointment";
 import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import SubHeading from "./SubHeading";
 import Image from "next/image";
-import useDebounce from "../functions/debounce";
 import validateField from "../functions/validateField";
 import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
@@ -20,21 +18,28 @@ export default function AppointmentBookingModal({
 }: {
   onClickHandler: () => void;
 }) {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  // const errorMap: Map<string, string> = new Map([
+  //   ["selectedHospital", ""],
+  //   ["selectedSpecialization", ""],
+  //   ["selectedDoctor", ""],
+  //   ["selectedDate", ""],
+  //   ["selectedTime", ""],
+  // ]);
+
   const session = useSession();
   const userId = session.data?.user.id;
   const [doctorId, setDoctorId] = useState("");
   const [specialization, setSpecialization] = useState(""); // Added state for specialization
 
-  const errorsMap: Map<string, string> = new Map();
-
-  const validate = useCallback((field: string, value: string) => {
-    const errorMessage: string = validateField(
-      scheduleAppointment,
-      field,
-      value
-    );
-    setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
-  }, []);
+  // const validate = useCallback((field: string, value: string) => {
+  //   const errorMessage: string = validateField(
+  //     scheduleAppointment,
+  //     field,
+  //     value
+  //   );
+  //   setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
+  // }, []);
 
   const router = useRouter();
   const [hospitalId, setHospitalId] = useState<string>("");
@@ -44,13 +49,9 @@ export default function AppointmentBookingModal({
   const [doctorName, setDoctorName] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
-  const [reason, setReason] = useState<string>("");
-  const [error, setErrors] = useState<Map<string, string>>(errorsMap);
+  // const [reason, setReason] = useState<string>("");
+  // const [error, setErrors] = useState<Map<string, string>>(errorsMap);
 
-  const debouncedDate = useDebounce(date, 500);
-  const debouncedTime = useDebounce(time, 500);
-
-  // Fetch hospitals data
   useEffect(() => {
     const hospitalsData = async () => {
       try {
@@ -73,6 +74,7 @@ export default function AppointmentBookingModal({
       try {
         const response = await axios.post("/api/doctors", {
           hospitalId: hospitalId,
+          specialization: specialization,
         });
         setDoctorsArray(response.data);
       } catch (error) {
@@ -84,7 +86,7 @@ export default function AppointmentBookingModal({
       }
     }
     if (hospitalId) fetchDoctors();
-  }, [hospitalId]);
+  }, [hospitalId, specialization]);
 
   const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
   console.log(
@@ -108,15 +110,6 @@ export default function AppointmentBookingModal({
     "Surgery",
   ];
 
-  // Validate fields with debounced values
-  useEffect(() => {
-    validate("date", debouncedDate);
-  }, [debouncedDate, validate]);
-
-  useEffect(() => {
-    validate("time", debouncedTime);
-  }, [debouncedTime, validate]);
-
   // Update hospitalId when hospitalName changes
   useEffect(() => {
     const hospital = hospitalsArray.find(
@@ -137,7 +130,9 @@ export default function AppointmentBookingModal({
     }
   }, [doctorName, doctorsArray]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsSubmitting(true);
     const result = scheduleAppointment.safeParse({
       hospitalId,
       specialization,
@@ -148,15 +143,25 @@ export default function AppointmentBookingModal({
       time,
     });
 
+    console.log("result after zod validation of appointment", result);
+
     if (!result.success) {
       // Update the errors state with all validation errors
-      const fieldErrors = new Map<string, string>();
+      // const fieldErrors = new Map<string, string>();
       result.error.errors.forEach((error) => {
-        if (typeof error.path[0] === "string") {
-          fieldErrors.set(error.path[0], error.message);
-        }
+        toast.error(error.message);
       });
-      setErrors(fieldErrors);
+      setIsSubmitting(false);
+      // if (!specialization) {
+      //   toast.error("Select Specialization");
+      // }
+      // if (!hospitalId) {
+      //   toast.error("Select Hospital");
+      // }
+      // if (!doctorId) {
+      //   toast.error("Select Doctor");
+      // }
+      // setErrors(fieldErrors);
       toast.error("Please fix the errors before submitting");
       return;
     }
@@ -171,6 +176,15 @@ export default function AppointmentBookingModal({
         status: "PENDING",
         time,
       });
+      console.log(
+        "Data i want to print from appointment booking modal ",
+        hospitalId,
+        specialization,
+        doctorId,
+        userId,
+        date,
+        time
+      );
       if (response.status === 200) {
         toast.success("Appointment Booked successfully");
         router.refresh();
@@ -178,11 +192,14 @@ export default function AppointmentBookingModal({
         router.push("/patient-dashboard");
       }
     } catch (error) {
+      toast.error("All fields are required");
       console.error(`Error Occurred While Creating Appointment ${error}`);
       return NextResponse.json(
         { error: "Error Occurred While Creating Appointment" },
         { status: 500 }
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -191,7 +208,7 @@ export default function AppointmentBookingModal({
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setter(value);
-      validate(field, value);
+      // validate(field, value);
     };
 
   const dropdownChangeHospital = (item: string) => {
@@ -231,47 +248,58 @@ export default function AppointmentBookingModal({
               <SubHeading text="Please fill in the details to schedule" />
               <div className="md:flex ml-5 gap-3">
                 <DropDown
+                  noDropdownDataText="No Hospitals are registered from your City"
                   label={"Select Hospital"}
                   dropdownContent={hospitalsNamesArray}
                   onSelect={dropdownChangeHospital}
                 />
                 <DropDown
+                  noDropdownDataText=""
                   label={"Select Specialization"}
                   dropdownContent={dropdownContent}
                   onSelect={dropdownChangeSpe} // Fixed specialization dropdown
                 />
                 <DropDown
+                  noDropdownDataText="No doctors available with your selected specialization at this hospital"
                   label={"Select Doctor"}
                   dropdownContent={doctorsNameArray}
                   onSelect={dropdownChangeDoc}
                 />
               </div>
-              <div className="md:flex justify-around">
-                <InputBox
-                  label="Expected Appointment Date "
-                  imageSource="/icons/calender.svg"
-                  placeholder="YYYY-MM-DD"
-                  value={date}
-                  error={error.get("date")}
-                  onChange={onChangeHandler(setDate, "date")}
-                />
-                <InputBox
-                  label="Expected Appointment Time "
-                  imageSource="/icons/clock.svg"
-                  placeholder="HH:MM (24 Hrs)"
-                  value={time}
-                  error={error.get("time")}
-                  onChange={onChangeHandler(setTime, "time")}
-                />
-              </div>
-              <div className="flex justify-center">
-                <button
-                  onClick={onSubmit}
-                  className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] rounded-lg"
-                >
-                  Book Appointment
-                </button>
-              </div>
+              <form>
+                <div className="md:flex justify-around">
+                  <InputBox
+                    type="text"
+                    required={true}
+                    label="Expected Appointment Date "
+                    imageSource="/icons/calender.svg"
+                    placeholder="YYYY-MM-DD"
+                    value={date}
+                    error={""}
+                    onChange={onChangeHandler(setDate, "date")}
+                  />
+                  <InputBox
+                    type="text"
+                    required={true}
+                    label="Expected Appointment Time "
+                    imageSource="/icons/clock.svg"
+                    placeholder="HH:MM (24 Hrs)"
+                    value={time}
+                    error={""}
+                    onChange={onChangeHandler(setTime, "time")}
+                  />
+                </div>
+                <div className="flex justify-center">
+                  <button
+                    onClick={onSubmit}
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="disabled:bg-gray-400 disabled:hover:text-white text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] rounded-lg"
+                  >
+                    Book Appointment
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

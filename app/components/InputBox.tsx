@@ -8,6 +8,8 @@ const InputBox: React.FC<InputBoxProps> = ({
   onChange,
   value,
   error,
+  type,
+  required,
 }) => {
   return (
     <>
@@ -27,7 +29,8 @@ const InputBox: React.FC<InputBoxProps> = ({
           />
           <input
             value={value}
-            type="text"
+            type={type}
+            required={required}
             placeholder={placeholder}
             onChange={onChange}
             className={`text-[#11111]  font-medium  text-start rounded-lg  hover:bg-[#313131] p-2 ml-[7px] w-[175px] bg-[#3d3d3d]`}
@@ -46,6 +49,8 @@ type InputBoxProps = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   value: string;
   error: string | undefined;
+  type: string;
+  required: boolean;
 };
 
 export default InputBox;
