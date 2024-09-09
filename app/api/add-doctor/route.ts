@@ -13,6 +13,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // const id = tokenData?.id;
   console.log(tokenData, "Token data form add doctor");
   const id = tokenData?.user.id;
+  if (name.length == 0) {
+    throw Error;
+  }
   console.log(
     specialization,
     name,
