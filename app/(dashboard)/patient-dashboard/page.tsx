@@ -12,7 +12,7 @@ export default async function PatientDashboard() {
   const userId = session?.user.id;
   console.log(userId, "userId of the user right now ");
   console.log(`${session?.user?.name} from patient dashboard`);
-  const appointments = await prisma.appointment.findMany({
+  const appointments = await prisma.healthConnect_Appointment.findMany({
     where: {
       patientId: userId,
     },

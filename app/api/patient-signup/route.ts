@@ -11,7 +11,7 @@ export async function POST(req: Request, res: Response) {
   const prisma = new PrismaClient();
   console.log(password, hospitalName, emailH, phoneNumberH, city);
   try {
-    const response = await prisma.user.create({
+    const response = await prisma.healthConnect_User.create({
       data: {
         fullName: hospitalName,
         email: emailH,

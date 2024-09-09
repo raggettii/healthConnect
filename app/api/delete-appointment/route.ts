@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   console.log(appointmentId, "here is the appointment id ");
   const prisma = new PrismaClient();
   try {
-    const response = await prisma.appointment.delete({
+    const response = await prisma.healthConnect_Appointment.delete({
       where: {
         id: appointmentId,
       },

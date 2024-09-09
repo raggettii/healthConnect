@@ -12,7 +12,7 @@ export default async function Hospitals() {
   const city = token?.user.address;
   console.log(city);
   const prisma = new PrismaClient();
-  const hospitalsData = await prisma.hospital.findMany({
+  const hospitalsData = await prisma.healthConnect_Hospital.findMany({
     where: {
       city: city,
     },

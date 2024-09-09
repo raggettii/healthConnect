@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import { PrismaClient, SPECIALIZATION, STATUS } from "@prisma/client";
+import {
+  PrismaClient,
+  HEALTHCONNECT_SPECIALIZATION,
+  HEALTHCONNECT_STATUS,
+} from "@prisma/client";
 export async function POST(req: NextRequest) {
   const prisma = new PrismaClient();
   const {
@@ -13,15 +17,15 @@ export async function POST(req: NextRequest) {
     time,
   }: {
     hospitalId: string;
-    specialization: SPECIALIZATION;
+    specialization: HEALTHCONNECT_SPECIALIZATION;
     doctorId: string;
     userId: string;
     date: string;
-    status: STATUS;
+    status: HEALTHCONNECT_STATUS;
     time: string;
   } = await req.json();
   try {
-    const response = await prisma.appointment.create({
+    const response = await prisma.healthConnect_Appointment.create({
       data: {
         doctorSpecialization: specialization,
         date,

@@ -10,7 +10,7 @@ export async function POST(req: Request, res: Response) {
   }: signUpAdminType = await req.json();
   const prisma = new PrismaClient();
   try {
-    const response = await prisma.hospital.create({
+    const response = await prisma.healthConnect_Hospital.create({
       data: {
         fullName: hospitalName,
         email: emailH,

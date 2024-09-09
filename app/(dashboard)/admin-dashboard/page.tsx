@@ -1,6 +1,4 @@
 import AddDoctorButton from "@/app/components/AddDoctorButton";
-import ButtonComponent from "@/app/components/ButtonComponent";
-import DropDown from "@/app/components/DropDown";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
 // import { NextRequest } from "next/server";
@@ -16,7 +14,7 @@ export default async function AdminDashboard() {
   console.log(sessionData, "Session data form adminDashboard");
   const hospitalId = sessionData?.user.id;
   const newName = sessionData?.user.name;
-  const appointments = await prisma.appointment.findMany({
+  const appointments = await prisma.healthConnect_Appointment.findMany({
     where: {
       hospitalId: hospitalId,
     },

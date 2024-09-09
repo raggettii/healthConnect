@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   console.log(hospital);
   const prisma = new PrismaClient();
   try {
-    const response = await prisma.appointment.findMany({
+    const response = await prisma.healthConnect_Appointment.findMany({
       //     where: {
       //       hospital: hospital,
       //     },

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const prisma = new PrismaClient();
   console.log(hospitalId, "hospitalId form api doctors");
   try {
-    const doctors = await prisma.doctor.findMany({
+    const doctors = await prisma.healthConnect_Doctor.findMany({
       where: {
         hospitalId: hospitalId,
       },

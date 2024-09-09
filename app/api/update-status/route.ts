@@ -1,4 +1,4 @@
-import { PrismaClient, STATUS } from "@prisma/client";
+import { PrismaClient, HEALTHCONNECT_STATUS } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { date } from "zod";
 
@@ -8,11 +8,15 @@ export async function POST(req: NextRequest) {
     date,
     time,
     selectedValue,
-  }: { id: string; date: string; time: string; selectedValue: STATUS } =
-    await req.json();
+  }: {
+    id: string;
+    date: string;
+    time: string;
+    selectedValue: HEALTHCONNECT_STATUS;
+  } = await req.json();
   const prisma = new PrismaClient();
   try {
-    const updatedStatus = await prisma.appointment.update({
+    const updatedStatus = await prisma.healthConnect_Appointment.update({
       where: {
         id: id,
       },

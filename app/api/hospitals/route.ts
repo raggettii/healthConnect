@@ -8,7 +8,7 @@ export async function GET() {
   const sessionData = await getServerSession(options);
   const city = sessionData?.user.address;
   try {
-    const response = await prisma.hospital.findMany({
+    const response = await prisma.healthConnect_Hospital.findMany({
       where: {
         city: city,
       },

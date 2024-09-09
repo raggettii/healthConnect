@@ -1,4 +1,4 @@
-import { PrismaClient, SPECIALIZATION } from "@prisma/client";
+import { PrismaClient, HEALTHCONNECT_SPECIALIZATION } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { options } from "../auth/[...nextauth]/options";
@@ -7,7 +7,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const {
     specialization,
     name,
-  }: { specialization: SPECIALIZATION; name: string } = await req.json();
+  }: { specialization: HEALTHCONNECT_SPECIALIZATION; name: string } =
+    await req.json();
   const tokenData = await getServerSession(options);
   // const id = tokenData?.id;
   console.log(tokenData, "Token data form add doctor");
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     "Data entered for adding doctorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
   );
   try {
-    const addDoctor = await prisma.doctor.create({
+    const addDoctor = await prisma.healthConnect_Doctor.create({
       data: {
         name,
         specialization,

@@ -48,8 +48,12 @@ export const options: NextAuthOptions = {
         console.log("First role", role);
         const user: UserType =
           role === "admin"
-            ? await prisma.hospital.findFirst({ where: { phoneNumber } })
-            : await prisma.user.findFirst({ where: { phoneNumber } });
+            ? await prisma.healthConnect_Hospital.findFirst({
+                where: { phoneNumber },
+              })
+            : await prisma.healthConnect_User.findFirst({
+                where: { phoneNumber },
+              });
 
         // console.log(user);
         // console.log("HERE 3 ");
