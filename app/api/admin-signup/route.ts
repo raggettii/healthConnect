@@ -19,7 +19,7 @@ export async function POST(req: Request, res: Response) {
         password: password,
       },
     });
-    console.log(`Hospital created successfully ${response}`);
+    // console.log(`Hospital created successfully ${response}`);
     return NextResponse.json({
       response,
     });

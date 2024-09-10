@@ -18,7 +18,7 @@ export default function DashboardLayout({
   const sessionData = useSession();
   const pathName = usePathname();
   const newPathName = pathName.split("/");
-  console.log(newPathName[1]);
+  // console.log(newPathName[1]);
   const firstName = sessionData.data?.user?.name;
   return (
     <>

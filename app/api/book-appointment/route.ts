@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
         status,
       },
     });
-    console.log(response, "api response after book appointment");
+    // console.log(response, "api response after book appointment");
     return NextResponse.json({
       msg: `Appointment added successfully ${response}`,
     });

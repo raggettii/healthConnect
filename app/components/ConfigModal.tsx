@@ -39,17 +39,17 @@ export default function ConfigModal({
         selectedValue,
       });
       if (response) {
-        console.log(
-          "HEYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-          response
-        );
+        // console.log(
+        //   "HEYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+        //   response
+        // );
         toast.success("Status updated successfully ");
         setIsSubmitting(false);
         closeModal();
         router.refresh();
       }
     } catch (error) {
-      console.log(`Error occured while updating status ${error}`);
+      // console.log(`Error occured while updating status ${error}`);
       return NextResponse.json(
         { error: "Error occured while updating status" },
         { status: 500 }
@@ -66,16 +66,16 @@ export default function ConfigModal({
   const dropdownChange = (item: string) => {
     setSelectedValue(item);
   };
-  console.log(selectedValue);
+  // console.log(selectedValue);
   const onClickHandler =
     (value: string) => (e: ChangeEvent<HTMLInputElement>) => {
       if (value === "description") setDescription(e.target.value);
       if (value === "date") setDate(e.target.value);
       if (value === "time") setTime(e.target.value);
     };
-  console.log(date);
-  console.log(time);
-  console.log(description);
+  // console.log(date);
+  // console.log(time);
+  // console.log(description);
   return (
     <>
       <div

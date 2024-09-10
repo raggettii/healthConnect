@@ -18,7 +18,7 @@ export default function OtpVerifyModal({
   const prisma = new PrismaClient();
   const onClickHandler = async () => {
     try {
-      console.log("hii from onClick inside deletion of ststua");
+      // console.log("hii from onClick inside deletion of ststua");
       const response = await axios.post("/api/delete-appointment", {
         appointmentId: id,
       });

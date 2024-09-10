@@ -10,7 +10,7 @@ export default async function AdminDashboard() {
   const prisma = new PrismaClient();
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
   const sessionData: Session | null = await getServerSession(options);
-  console.log(sessionData, "Session data form adminDashboard");
+  // console.log(sessionData, "Session data form adminDashboard");
   const hospitalId = sessionData?.user.id;
   const newName = sessionData?.user.name;
   const appointments = await prisma.healthConnect_Appointment.findMany({

@@ -20,12 +20,12 @@ export async function POST(req: Request, res: Response) {
         password: password,
       },
     });
-    console.log(`User created successfully ${response}`);
+    // console.log(`User created successfully ${response}`);
     return NextResponse.json({
       response,
     });
   } catch (error) {
-    console.error(`Error occured while signup at user ${error}`);
+    // console.error(`Error occured while signup at user ${error}`);
     return NextResponse.json(
       { error: "Error occured while signup at user " },
       { status: 500 }

@@ -15,7 +15,7 @@ export default function DropDown({
   const [dropdownHeader, setDropdownHeader] = useState<string>(label);
   const headerChange = (item: string) => {
     setDropdownHeader(item);
-    console.log("Hii from header change");
+    // console.log("Hii from header change");
   };
   const [dropdownToggle, setDropdownToggle] = useState<boolean>(false);
   const togglerAndHeader = (item: string) => {

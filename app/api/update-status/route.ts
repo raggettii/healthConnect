@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         status: selectedValue,
       },
     });
-    console.log(updatedStatus, "response after updating status");
+    // console.log(updatedStatus, "response after updating status");
     return NextResponse.json(updatedStatus);
   } catch (error) {
     console.error(`Error occured while updating status ${error}`);

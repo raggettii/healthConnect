@@ -10,8 +10,8 @@ export default async function PatientDashboard() {
   const prisma = new PrismaClient();
   const session = await getServerSession(options);
   const userId = session?.user.id;
-  console.log(userId, "userId of the user right now ");
-  console.log(`${session?.user?.name} from patient dashboard`);
+  // console.log(userId, "userId of the user right now ");
+  // console.log(`${session?.user?.name} from patient dashboard`);
   const appointments = await prisma.healthConnect_Appointment.findMany({
     where: {
       patientId: userId,
@@ -29,7 +29,7 @@ export default async function PatientDashboard() {
       },
     },
   });
-  console.log(appointments, "respnse after fetching appointments ");
+  // console.log(appointments, "respnse after fetching appointments ");
   const navData = ["Hospital", "Doctor", "Date", "Time", "Status", "Cancel"];
   const appointmentsData = appointments.map(
     ({ id, date, time, status, doctor, hospital }) => ({
@@ -42,7 +42,7 @@ export default async function PatientDashboard() {
       doctor: doctor.name,
     })
   );
-  console.log(appointmentsData, "Just logging Appoinemnets dataaaaa");
+  // console.log(appointmentsData, "Just logging Appoinemnets dataaaaa");
   const array: Array<data> = [
     {
       key: "unique string",

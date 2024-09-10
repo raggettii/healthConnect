@@ -13,7 +13,7 @@ export async function GET() {
         city: city,
       },
     });
-    console.log(response, "From api hospital call");
+    // console.log(response, "From api hospital call");
     return NextResponse.json(response);
   } catch (error) {
     console.error(`Error occured while fetching hospitals ${error}`);

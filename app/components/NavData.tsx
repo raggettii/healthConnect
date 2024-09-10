@@ -14,7 +14,7 @@ export default function NavData({
   id,
   patient,
 }: data) {
-  console.log(id, "id from nav data");
+  // console.log(id, "id from nav data");
   const pathName = usePathname();
   const actualPathname = pathName.split("-");
   const actualPathname1 = actualPathname[0];

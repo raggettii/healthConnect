@@ -22,8 +22,8 @@ export default function AddDoctorModal({
   const onClickHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDoctorName(e.target.value);
   };
-  console.log(doctorName);
-  console.log(selectedValue);
+  // console.log(doctorName);
+  // console.log(selectedValue);
   const dropdownContent = [
     "NA",
     "Family_Medicine",
@@ -47,7 +47,7 @@ export default function AddDoctorModal({
         name: doctorName,
       });
       toast.success("Doctor added Successfully");
-      console.log("Doctor added successfully:", response.data);
+      // console.log("Doctor added successfully:", response.data);
       closeModal();
     } catch (error) {
       toast.error("All fields are required");

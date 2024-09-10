@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   }: { hospitalId: string; specialization: HEALTHCONNECT_SPECIALIZATION } =
     await req.json();
   const prisma = new PrismaClient();
-  console.log(hospitalId, "hospitalId form api doctors");
+  // console.log(hospitalId, "hospitalId form api doctors");
   try {
     const doctors = await prisma.healthConnect_Doctor.findMany({
       where: {
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         specialization: specialization,
       },
     });
-    console.log(doctors, "from server side api call doctors array");
+    // console.log(doctors, "from server side api call doctors array");
     return NextResponse.json(doctors);
   } catch (error) {
     console.error(`Error occured while fetching doctors ${error}`);

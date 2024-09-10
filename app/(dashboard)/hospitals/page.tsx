@@ -8,21 +8,21 @@ import Nodata from "@/app/components/Nodata";
 export default async function Hospitals() {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getServerSession(options);
-  console.log("token from hospitals page ", token);
+  // console.log("token from hospitals page ", token);
   const city = token?.user.address;
-  console.log(city);
+  // console.log(city);
   const prisma = new PrismaClient();
   const hospitalsData = await prisma.healthConnect_Hospital.findMany({
     where: {
       city: city,
     },
   });
-  console.log("Hospitals fetched", hospitalsData);
+  // console.log("Hospitals fetched", hospitalsData);
   const hospitalsFetched = hospitalsData.map(({ fullName, phoneNumber }) => ({
     name: fullName,
     contactNumber: phoneNumber,
   }));
-  console.log("Hospitals fetched data", hospitalsFetched);
+  // console.log("Hospitals fetched data", hospitalsFetched);
   return (
     <>
       <div className="max-h-full min-h-[678px]">

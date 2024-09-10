@@ -15,12 +15,12 @@ const validateField = (
     [field]: schema.shape[field],
   });
 
-  console.log("validateSchema:", validateSchema);
+  // console.log("validateSchema:", validateSchema);
 
   try {
     const parsedValue = { [field]: value };
     const result = validateSchema.safeParse(parsedValue);
-    console.log("Parsed Result:", result);
+    // console.log("Parsed Result:", result);
 
     if (result.success) {
       return "";
@@ -28,13 +28,13 @@ const validateField = (
       throw result.error;
     }
   } catch (error) {
-    console.log("Error:", error);
+    // console.log("Error:", error);
 
     if (error instanceof z.ZodError) {
-      console.log("Validation error:", error.errors);
+      // console.log("Validation error:", error.errors);
       return error.errors[0]?.message || "Invalid value";
     } else {
-      console.log("Unknown error occurred");
+      // console.log("Unknown error occurred");
       return "Something Bad Happened";
     }
   }

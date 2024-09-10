@@ -70,10 +70,10 @@ export default function AppointmentBookingModal({
   }, [hospitalId, specialization]);
 
   const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
-  console.log(
-    doctorsArray,
-    "logging fetched doctor data in appointment booking modal "
-  );
+  // console.log(
+  //   doctorsArray,
+  //   "logging fetched doctor data in appointment booking modal "
+  // );
   const doctorsNameArray = doctorsArray.map(({ name }) => name);
 
   const dropdownContent = [
@@ -122,7 +122,7 @@ export default function AppointmentBookingModal({
       time,
     });
 
-    console.log("result after zod validation of appointment", result);
+    // console.log("result after zod validation of appointment", result);
 
     if (!result.success) {
       result.error.errors.forEach((error) => {
@@ -143,15 +143,15 @@ export default function AppointmentBookingModal({
         status: "PENDING",
         time,
       });
-      console.log(
-        "Data i want to print from appointment booking modal ",
-        hospitalId,
-        specialization,
-        doctorId,
-        userId,
-        date,
-        time
-      );
+      // console.log(
+      //   "Data i want to print from appointment booking modal ",
+      //   hospitalId,
+      //   specialization,
+      //   doctorId,
+      //   userId,
+      //   date,
+      //   time
+      // );
       if (response.status === 200) {
         toast.success("Appointment Booked successfully");
         router.refresh();
@@ -223,7 +223,7 @@ export default function AppointmentBookingModal({
                   noDropdownDataText=""
                   label={"Select Specialization"}
                   dropdownContent={dropdownContent}
-                  onSelect={dropdownChangeSpe} 
+                  onSelect={dropdownChangeSpe}
                 />
                 <DropDown
                   noDropdownDataText="No doctors available with your selected specialization at this hospital"
