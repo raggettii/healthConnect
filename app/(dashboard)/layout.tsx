@@ -16,8 +16,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const sessionData = useSession();
-  // console.log(`${JSON.stringify(sessionData)} `);
-  // console.log(sessionData.data?.user?.name);
   const pathName = usePathname();
   const newPathName = pathName.split("/");
   console.log(newPathName[1]);
@@ -26,8 +24,6 @@ export default function DashboardLayout({
     <>
       <nav className="flex justify-between border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
         <MainLogoName />
-
-        {/* <Link href={"/api/auth/signout"}> */}
         <button
           className="border p-1 rounded shadow-lg"
           onClick={() => {
@@ -36,7 +32,6 @@ export default function DashboardLayout({
         >
           SignOut
         </button>
-        {/* </Link> */}
       </nav>
       <div className="mt-10 ">
         <div className="flex justify-between">

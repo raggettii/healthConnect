@@ -1,7 +1,6 @@
 import AddDoctorButton from "@/app/components/AddDoctorButton";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
-// import { NextRequest } from "next/server";
 import axios from "axios";
 import { getServerSession, Session } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
@@ -21,12 +20,12 @@ export default async function AdminDashboard() {
     include: {
       patient: {
         select: {
-          fullName: true, // Include doctor's name
+          fullName: true,
         },
       },
       doctor: {
         select: {
-          name: true, // Include hospital's name
+          name: true,
         },
       },
     },
@@ -42,44 +41,6 @@ export default async function AdminDashboard() {
       doctor: doctor.name,
     })
   );
-  // const array = axios.get("/api/hospital-appointments");
-  // console.log(array);
-
-  // console.log(id, "id hai bhaiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-  // const array: Array<data> = [
-  //   {
-  //     key: "unique string",
-  //     patient: "abhishake",
-  //     date: "date hai",
-  //     time: "1",
-  //     status: "PENDING",
-  //     doctor: "Dr singh",
-  //   },
-  //   {
-  //     key: "unique string",
-  //     patient: "raamkaa",
-  //     date: "date hai",
-  //     time: "12 baje",
-  //     status: "PENDING",
-  //     doctor: "Dr singh",
-  //   },
-  //   {
-  //     key: "unique string",
-  //     patient: "raamkaa",
-  //     date: "date hai",
-  //     time: "12 baje",
-  //     status: "CANCELLED",
-  //     doctor: "Dr Abhi Singh bhadoriys is the badhf hsdh",
-  //   },
-  //   {
-  //     key: "unique string",
-  //     patient: "shubham",
-  //     date: "date hai",
-  //     time: "12 baje",
-  //     status: "PENDING",
-  //     doctor: "Dr singh",
-  //   },
-  // ];
   return (
     <>
       <AddDoctorButton text={"+ Add Doctor"} />
@@ -122,5 +83,3 @@ type data = {
   doctor: string;
   patient: string;
 };
-
-// export default adminDashboard;

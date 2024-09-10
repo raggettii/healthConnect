@@ -27,12 +27,6 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        // after clicking the signin button this function gets in action
-        // user return statements here leads to returning actual values
-        // means returning null will leads to error throuwn on frontend
-        // and returning any data will leads to get it saved int cookies
-        // so that we can use it later
-        // console.log("HERE 1 ");
         if (
           !credentials?.role ||
           !credentials?.phoneNumber ||
@@ -43,7 +37,6 @@ export const options: NextAuthOptions = {
         const role = (credentials.role as string).toLowerCase();
         console.log(`after lowercase the role is ${role}`);
         const { phoneNumber, password } = credentials as CredentialsType;
-        // console.log("HERE 2 ");
         role1 = role;
         console.log("First role", role);
         const user: UserType =
@@ -54,18 +47,12 @@ export const options: NextAuthOptions = {
             : await prisma.healthConnect_User.findFirst({
                 where: { phoneNumber },
               });
-
-        // console.log(user);
-        // console.log("HERE 3 ");
         console.log(user, "before !user logging user");
         if (!user) {
           console.log(user, "inside !user logging user");
           console.log("Inside (!user) condition ");
           throw new Error("Error While fetching data from server");
         }
-        // console.log(user);
-        // let isPasswordValid;
-        // console.log(user);
         console.log("second role", role1);
         if (password != user.password) throw new Error("Incorrect Password");
         return user;
@@ -87,17 +74,8 @@ export const options: NextAuthOptions = {
           return true;
         }
       }
-      // console.log("credentials  from signIn callback ", typedCredentials.role);
       return false;
     },
-    // async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-    //   console.log(role1, "from redirect callback");
-    //   if (role1 == "admin") {
-    //     return `${baseUrl}/admin-dashboard`; // Redirect to admin dashboard
-    //   } else if (role1 == "user") {
-    //     return `${baseUrl}/hospitals`; // Redirect to hospitals page
-    //   }
-    // },
     jwt({ token, user, session }) {
       const userInJWT = user as UserType;
       console.log("jwt callback ", { token, user, session });

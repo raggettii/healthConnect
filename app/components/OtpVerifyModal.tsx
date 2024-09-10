@@ -15,8 +15,6 @@ export default function OtpVerifyModal({
   id,
 }: OtpVerifyModalType) {
   const router = useRouter();
-  // on click par use delete karna hai
-  // appointment ko
   const prisma = new PrismaClient();
   const onClickHandler = async () => {
     try {

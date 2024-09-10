@@ -1,11 +1,10 @@
 import HospitalComponent from "@/app/components/HospitalComponent";
 import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
-import { getToken } from "next-auth/jwt";
-// import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Nodata from "@/app/components/Nodata";
+
 export default async function Hospitals() {
   const secret = process.env.NEXTAUTH_SECRET;
   const token = await getServerSession(options);
@@ -24,20 +23,6 @@ export default async function Hospitals() {
     contactNumber: phoneNumber,
   }));
   console.log("Hospitals fetched data", hospitalsFetched);
-  const hospitals = [
-    {
-      name: "Guru Dev ",
-      city: "Delhi",
-    },
-    {
-      name: "Guru Nanak 2 ",
-      city: "Delhi Yes it is ",
-    },
-    {
-      name: "Not Guru Nanak",
-      city: "Delhi obviously dude ",
-    },
-  ];
   return (
     <>
       <div className="max-h-full min-h-[678px]">

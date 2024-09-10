@@ -1,5 +1,4 @@
 "use client";
-// import { sendOTP } from "../functions/twilio";
 import { useState } from "react";
 import OtpVerifyModal from "./OtpVerifyModal";
 
@@ -9,7 +8,6 @@ const OtpSendButton: React.FC<ButtonComponentProps> = ({
 }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const handleOpenModel = () => {
-    // sendOTP(phoneNumber);
     setModalOpen(!isModalOpen);
   };
   return (

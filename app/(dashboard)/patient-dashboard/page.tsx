@@ -19,19 +19,18 @@ export default async function PatientDashboard() {
     include: {
       doctor: {
         select: {
-          name: true, // Include doctor's name
+          name: true,
         },
       },
       hospital: {
         select: {
-          fullName: true, // Include hospital's name
+          fullName: true,
         },
       },
     },
   });
   console.log(appointments, "respnse after fetching appointments ");
   const navData = ["Hospital", "Doctor", "Date", "Time", "Status", "Cancel"];
-  // const firstName = "Ranjit";
   const appointmentsData = appointments.map(
     ({ id, date, time, status, doctor, hospital }) => ({
       key: id,
@@ -80,7 +79,6 @@ export default async function PatientDashboard() {
   ];
   return (
     <>
-      {/* <div>{JSON.stringify(session)}</div> */}
       <div className="max-h-full min-h-[678px]">
         <div className="flex  justify-end mr-3 lg:mr-8">
           <BookAppointment text={"+ Book New Appointment"} />

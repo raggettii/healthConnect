@@ -46,36 +46,10 @@ export default function SignUpForm({
   const [city, setCity] = useState<string>("");
   const [errors, setErrors] = useState<Map<string, string>>(errorMap);
 
-  // const debouncedHospitalName = useDebounce(hospitalName, 500);
-  // const debouncedEmailH = useDebounce(emailH, 500);
-  // const debouncedPhoneNumberH = useDebounce(phoneNumberH, 500);
-  // const debouncedCity = useDebounce(city, 500);
-  // const debouncedPassword = useDebounce(password, 500);
-
   const validate = useCallback((field: string, value: string) => {
     const errorMessage: string = validateField(signupSchema, field, value);
     setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
   }, []);
-
-  // React.useEffect(() => {
-  //   validate("hospitalName", debouncedHospitalName);
-  // }, [debouncedHospitalName, validate]);
-
-  // React.useEffect(() => {
-  //   validate("password", debouncedPassword);
-  // }, [debouncedPassword, validate]);
-
-  // React.useEffect(() => {
-  //   validate("hospitalEmail", debouncedEmailH);
-  // }, [debouncedEmailH, validate]);
-
-  // React.useEffect(() => {
-  //   validate("phoneNumberH", debouncedPhoneNumberH);
-  // }, [debouncedPhoneNumberH, validate]);
-
-  // React.useEffect(() => {
-  //   validate("city", debouncedCity);
-  // }, [debouncedCity, validate]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -112,7 +86,6 @@ export default function SignUpForm({
       if (response.status === 200) {
         toast.success("Form submitted successfully");
         router.push(afterSignupUrl);
-        // router.refresh();
       }
     } catch (error) {
       alert("Error Occurred While Signing up");

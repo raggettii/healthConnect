@@ -10,7 +10,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }: { specialization: HEALTHCONNECT_SPECIALIZATION; name: string } =
     await req.json();
   const tokenData = await getServerSession(options);
-  // const id = tokenData?.id;
   console.log(tokenData, "Token data form add doctor");
   const id = tokenData?.user.id;
   if (name.length == 0) {
@@ -29,7 +28,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         specialization,
         hospital: {
           connect: {
-            id: id, // You should pass the hospitalId here
+            id: id,
           },
         },
       },

@@ -19,27 +19,11 @@ export default function AppointmentBookingModal({
   onClickHandler: () => void;
 }) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  // const errorMap: Map<string, string> = new Map([
-  //   ["selectedHospital", ""],
-  //   ["selectedSpecialization", ""],
-  //   ["selectedDoctor", ""],
-  //   ["selectedDate", ""],
-  //   ["selectedTime", ""],
-  // ]);
 
   const session = useSession();
   const userId = session.data?.user.id;
   const [doctorId, setDoctorId] = useState("");
   const [specialization, setSpecialization] = useState(""); // Added state for specialization
-
-  // const validate = useCallback((field: string, value: string) => {
-  //   const errorMessage: string = validateField(
-  //     scheduleAppointment,
-  //     field,
-  //     value
-  //   );
-  //   setErrors((prevErrors) => new Map(prevErrors).set(field, errorMessage));
-  // }, []);
 
   const router = useRouter();
   const [hospitalId, setHospitalId] = useState<string>("");
@@ -49,8 +33,6 @@ export default function AppointmentBookingModal({
   const [doctorName, setDoctorName] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
-  // const [reason, setReason] = useState<string>("");
-  // const [error, setErrors] = useState<Map<string, string>>(errorsMap);
 
   useEffect(() => {
     const hospitalsData = async () => {
@@ -68,7 +50,6 @@ export default function AppointmentBookingModal({
     hospitalsData();
   }, []);
 
-  // Fetch doctors data when hospitalId changes
   useEffect(() => {
     async function fetchDoctors() {
       try {
@@ -110,7 +91,6 @@ export default function AppointmentBookingModal({
     "Surgery",
   ];
 
-  // Update hospitalId when hospitalName changes
   useEffect(() => {
     const hospital = hospitalsArray.find(
       ({ fullName }) => fullName === hospitalName
@@ -121,7 +101,6 @@ export default function AppointmentBookingModal({
     }
   }, [hospitalName, hospitalsArray]);
 
-  // Update doctorId when doctorName changes
   useEffect(() => {
     const doctor = doctorsArray.find(({ name }) => name === doctorName);
     if (doctor) {
@@ -146,22 +125,10 @@ export default function AppointmentBookingModal({
     console.log("result after zod validation of appointment", result);
 
     if (!result.success) {
-      // Update the errors state with all validation errors
-      // const fieldErrors = new Map<string, string>();
       result.error.errors.forEach((error) => {
         toast.error(error.message);
       });
       setIsSubmitting(false);
-      // if (!specialization) {
-      //   toast.error("Select Specialization");
-      // }
-      // if (!hospitalId) {
-      //   toast.error("Select Hospital");
-      // }
-      // if (!doctorId) {
-      //   toast.error("Select Doctor");
-      // }
-      // setErrors(fieldErrors);
       toast.error("Please fix the errors before submitting");
       return;
     }
@@ -208,7 +175,6 @@ export default function AppointmentBookingModal({
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setter(value);
-      // validate(field, value);
     };
 
   const dropdownChangeHospital = (item: string) => {
@@ -216,7 +182,7 @@ export default function AppointmentBookingModal({
   };
 
   const dropdownChangeSpe = (item: string) => {
-    setSpecialization(item); // Fixed specialization handling
+    setSpecialization(item);
   };
 
   const dropdownChangeDoc = (item: string) => {
@@ -257,7 +223,7 @@ export default function AppointmentBookingModal({
                   noDropdownDataText=""
                   label={"Select Specialization"}
                   dropdownContent={dropdownContent}
-                  onSelect={dropdownChangeSpe} // Fixed specialization dropdown
+                  onSelect={dropdownChangeSpe} 
                 />
                 <DropDown
                   noDropdownDataText="No doctors available with your selected specialization at this hospital"
