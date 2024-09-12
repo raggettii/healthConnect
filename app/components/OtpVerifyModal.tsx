@@ -5,8 +5,10 @@ import Image from "next/image";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { NextResponse } from "next/server";
+import { number } from "zod";
+import toast from "react-hot-toast";
 
 export default function OtpVerifyModal({
   closeModal,
@@ -14,25 +16,21 @@ export default function OtpVerifyModal({
   placeholder,
   id,
 }: OtpVerifyModalType) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [otpText, setOtpText] = useState("");
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOtpText(e.target.value);
+  };
   const router = useRouter();
-  const prisma = new PrismaClient();
-  const onClickHandler = async () => {
-    try {
-      // console.log("hii from onClick inside deletion of ststua");
-      const response = await axios.post("/api/delete-appointment", {
-        appointmentId: id,
-      });
-      if (response) {
-        closeModal();
-        router.refresh();
-      }
-    } catch (error) {
-      console.error(`Error occured while deleting appointment ${error}`);
-      return NextResponse.json(
-        { error: "Error occured while deleting appointment" },
-        { status: 500 }
-      );
-    }
+  const onClickHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = {
+      opt: otpText,
+    };
+    // if (typeof otpText != "number") {
+    //   toast.error("OTP should be a Number");
+    //   return;
+    // }
   };
   return (
     <>
@@ -44,7 +42,7 @@ export default function OtpVerifyModal({
           onClick={(e) => e.stopPropagation()}
           className="flex flex-col bg-[#011e0e] p-3  rounded-lg shadow-2xl"
         >
-          <button onClick={closeModal}>
+          <button className=" w-[10px]" onClick={closeModal}>
             <Image
               className="bg-white "
               src={"/icons/cross.svg"}
@@ -56,20 +54,26 @@ export default function OtpVerifyModal({
           <h2 className="text-center m-4 text-white font-semibold text-lg">
             {label}
           </h2>
-          {/* <InputBox
-            placeholder={placeholder}
-            label=""
-            imageSource="/icons/otp.svg"
-            value=""
-            error=""
-            onChange={() => {}}
-          /> */}
-          <button
-            onClick={onClickHandler}
-            className="text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
-          >
-            Submit
-          </button>
+          <form action="" onSubmit={onClickHandler}>
+            <InputBox
+              type="tel"
+              required={true}
+              placeholder={placeholder}
+              label=""
+              imageSource="/icons/otp.svg"
+              value={otpText}
+              error=""
+              onChange={onChangeHandler}
+            />
+            <button
+              // onClick={onClickHandler}
+              type="submit"
+              disabled={isSubmitting}
+              className="disabled:bg-gray-500 disabled:text-white text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
+            >
+              Submit
+            </button>
+          </form>
         </div>
       </div>
     </>

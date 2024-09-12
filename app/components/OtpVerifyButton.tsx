@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import OtpVerifyModal from "./OtpVerifyModal";
+import OtpVerifyModal from "./cancelAppointmentModal";
 
 const OtpVerifyButton: React.FC<ButtonComponentProps> = ({
   text,

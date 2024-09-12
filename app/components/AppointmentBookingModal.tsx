@@ -12,6 +12,7 @@ import Image from "next/image";
 import validateField from "../functions/validateField";
 import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
+import Link from "next/link";
 
 export default function AppointmentBookingModal({
   onClickHandler,
@@ -112,6 +113,12 @@ export default function AppointmentBookingModal({
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
+    // if (!isPhoneNumberVerified) {
+    //   toast.error(`Phone Number not Verified`);
+    //   // toast.apply()
+    //   setIsSubmitting(false);
+    //   return;
+    // }
     const result = scheduleAppointment.safeParse({
       hospitalId,
       specialization,

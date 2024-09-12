@@ -2,7 +2,7 @@
 import Image from "next/image";
 import StatusBox from "./StatusBox";
 import { useState } from "react";
-import OtpVerifyModal from "./OtpVerifyModal";
+import OtpVerifyModal from "./cancelAppointmentModal";
 import ConfigModal from "./ConfigModal";
 import { usePathname } from "next/navigation";
 

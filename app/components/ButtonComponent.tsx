@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import OtpVerifyModal from "./OtpVerifyModal";
+import OtpVerifyModal from "./cancelAppointmentModal";
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({ text }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
