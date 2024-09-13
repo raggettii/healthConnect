@@ -10,7 +10,7 @@ const serviceId = process.env.TWILIO_SERVICE_ID_OTP!;
 
 const client = twilio(accountSID, authToken);
 
-export default async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   console.log("HII from send-otp route");
   const sessionData = await getServerSession(options);
   const phoneNumber = sessionData?.user.phoneNumber!;
@@ -43,10 +43,9 @@ export default async function GET(req: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log("Hello");
   } catch (error) {
-    console.error(`Error occured while sending OTP`);
+    toast.error(`Error occured while sending OTP ${phoneNumber}`);
+    console.error(`Error occured while sending OTP ${error}`);
     return NextResponse.json({ message: "Error Occured" }, { status: 500 });
   }
 }

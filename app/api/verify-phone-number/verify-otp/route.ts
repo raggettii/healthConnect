@@ -11,7 +11,7 @@ const serviceId = process.env.TWILIO_SERVICE_ID_OTP!;
 
 const client = twilio(accountSID, authToken);
 
-export default async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const prisma = new PrismaClient();
   const sessionData = await getServerSession(options);
   const phoneNumber = sessionData?.user.phoneNumber!;

@@ -86,6 +86,8 @@ export const options: NextAuthOptions = {
           name: userInJWT.fullName,
           address: userInJWT.city,
           role: role1,
+          phoneNumber: userInJWT.phoneNumber,
+          isVerified: userInJWT.isVerified,
         };
       }
       return token;
@@ -100,6 +102,8 @@ export const options: NextAuthOptions = {
             address: token.address,
             id: token.id,
             role: token.role,
+            phoneNumber: token.phoneNumber,
+            isVerified: token.isVerified,
           },
         };
       }
@@ -114,6 +118,7 @@ type UserType = {
   password: string;
   phoneNumber: string;
   city: string;
+  isVerified: boolean;
 } | null;
 type CredentialsType = {
   role: "admin" | "user";
