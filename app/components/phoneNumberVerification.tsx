@@ -1,16 +1,18 @@
 "use client";
 import { useState } from "react";
 import OtpVerifyModal from "./otpVerifyModal";
-import axios from "axios";
 
-export default function PhoneNumberVerification({ text }: { text: string }) {
+export default function PhoneNumberVerification({
+  text,
+  setter,
+}: {
+  text: string;
+  setter: () => void;
+}) {
   const [showModal, setShowModal] = useState(false);
+
   const changeModal = async () => {
     setShowModal(!showModal);
-    const data = await axios.get("/api/verify-phone-number/send-otp");
-    console.log(data);
-    // open karte hi otp send and a hot toast thing
-    // then verify
   };
   return (
     <>
@@ -19,6 +21,7 @@ export default function PhoneNumberVerification({ text }: { text: string }) {
       </button>
       {showModal && (
         <OtpVerifyModal
+          setter={setter}
           id="vuhsu"
           label="Verify Phone Number"
           placeholder="Enter OTP"
