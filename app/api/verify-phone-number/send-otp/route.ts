@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { options } from "../../auth/[...nextauth]/options";
 import twilio from "twilio";
-import toast from "react-hot-toast";
 
 const accountSID = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -14,10 +13,13 @@ export async function GET(req: NextRequest) {
   console.log("HII from send-otp route");
   const sessionData = await getServerSession(options);
   const phoneNumber = sessionData?.user.phoneNumber!;
+  console.log("Here is the phone number ", phoneNumber);
   try {
-    if (phoneNumber) {
+    if (!phoneNumber) {
+      console.log("HII before throwing error");
       throw new Error();
     }
+    console.log("HII after throwing error ");
     const twilioResponse = await client.verify.v2
       .services(serviceId)
       .verifications.create({
@@ -25,7 +27,7 @@ export async function GET(req: NextRequest) {
         to: phoneNumber,
       });
     if (twilioResponse.status === "pending") {
-      toast.success(`OTP successfully sent to ${phoneNumber}`);
+      console.log(`OTP successfully sent to ${phoneNumber}`);
       return NextResponse.json(
         {
           sent: true,
@@ -33,7 +35,7 @@ export async function GET(req: NextRequest) {
         { status: 200 }
       );
     } else {
-      toast.error(
+      console.log(
         `Please check your phone number ${phoneNumber}, or try again`
       );
       return NextResponse.json(
@@ -44,7 +46,6 @@ export async function GET(req: NextRequest) {
       );
     }
   } catch (error) {
-    toast.error(`Error occured while sending OTP ${phoneNumber}`);
     console.error(`Error occured while sending OTP ${error}`);
     return NextResponse.json({ message: "Error Occured" }, { status: 500 });
   }

@@ -4,6 +4,7 @@ import { options } from "../../auth/[...nextauth]/options";
 import twilio from "twilio";
 import toast from "react-hot-toast";
 import { PrismaClient } from "@prisma/client";
+import { cookies } from "next/headers";
 
 const accountSID = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -11,21 +12,25 @@ const serviceId = process.env.TWILIO_SERVICE_ID_OTP!;
 
 const client = twilio(accountSID, authToken);
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
+  const { otp } = await req.json();
+  console.log("here is the otp", otp);
   const prisma = new PrismaClient();
   const sessionData = await getServerSession(options);
   const phoneNumber = sessionData?.user.phoneNumber!;
-  // const isVerified = sessionData?.user
 
   const userId = sessionData?.user.id!;
   const role = sessionData?.user.role;
   try {
-    if (phoneNumber) {
+    if (!phoneNumber) {
       throw new Error();
     }
-
-    const { searchParams } = new URL(req.url);
-    const otp = searchParams.get("otp") as string;
+    // const searchParams = req.nextUrl.searchParams;
+    // console.log("Here is the full url ", req.url);
+    // // const { searchParams } = new URL(req.url);
+    // console.log("Here aare sercfd params ", searchParams.getAll("otp"));
+    // const otp = searchParams.get("otp") as string;
+    // console.log("Hii otp aai kya ", otp);
 
     const twilioResponse = await client.verify.v2
       .services(serviceId)
@@ -46,8 +51,6 @@ export async function GET(req: NextRequest) {
           data: { isVerified: true },
         });
       }
-      // await prisma
-      toast.success(`OTP verified successfully`);
       return NextResponse.json(
         {
           verified: true,
@@ -55,7 +58,6 @@ export async function GET(req: NextRequest) {
         { status: 200 }
       );
     } else {
-      toast.error(`Enter correct OTP or try again`);
       return NextResponse.json(
         {
           verified: false,
@@ -63,10 +65,8 @@ export async function GET(req: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log("Hello");
   } catch (error) {
-    console.error(`Error occured while sending OTP`);
+    console.error(`Error occured while verifying OTP`);
     return NextResponse.json({ message: "Error Occured" }, { status: 500 });
   }
 }
