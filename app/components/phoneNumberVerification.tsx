@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-// import OtpVerifyModal from "./otpVerifyModal";
-import OtpVerifyModal from "./otpVerifyModal";
+import OtpVerifyModal from "./OtpVerifyModal";
 
 export default function PhoneNumberVerification({
   text,

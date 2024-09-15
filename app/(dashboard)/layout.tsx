@@ -38,9 +38,7 @@ export default function DashboardLayout({
         <div className="flex justify-end gap-1 ">
           {!phoneNumberVerifiedLocally && (
             <PhoneNumberVerification
-              setter={() => {
-                setIsPhoneNumberVerifiedLocally(true);
-              }}
+              setter={() => setIsPhoneNumberVerifiedLocally}
               text="Verify Phone Number"
             />
           )}
