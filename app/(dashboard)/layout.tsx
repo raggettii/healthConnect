@@ -1,11 +1,11 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import MainLogoName from "../components/MainLogoName";
 import { Merriweather } from "next/font/google";
 import SubHeading from "../components/SubHeading";
-import BookAppointment from "../components/BookAppointment";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import PhoneNumberVerification from "../components/phoneNumberVerification";
 const merriWeather = Merriweather({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -18,20 +18,42 @@ export default function DashboardLayout({
   const sessionData = useSession();
   const pathName = usePathname();
   const newPathName = pathName.split("/");
-  // console.log(newPathName[1]);
   const firstName = sessionData.data?.user?.name;
+  const [phoneNumberVerifiedLocally, setIsPhoneNumberVerifiedLocally] =
+    useState(false);
+  const isPhoneNumberVerified = sessionData.data?.user.isVerified;
+  console.log(isPhoneNumberVerified, "is phone number verified");
+  useEffect(() => {
+    function func() {
+      if (isPhoneNumberVerified) {
+        setIsPhoneNumberVerifiedLocally(true);
+      }
+    }
+    func();
+  }, []);
+
   return (
     <>
       <nav className="flex justify-between border-b-2  border-gray-400  m-1 sm:p-3 p-1 shadow-xl ">
         <MainLogoName />
-        <button
-          className="border p-1 rounded shadow-lg"
-          onClick={() => {
-            signOut();
-          }}
-        >
-          SignOut
-        </button>
+        <div className="flex justify-end gap-1 ">
+          {!phoneNumberVerifiedLocally && (
+            <PhoneNumberVerification
+              setter={() => {
+                setIsPhoneNumberVerifiedLocally(true);
+              }}
+              text="Verify Phone Number"
+            />
+          )}
+          <button
+            className="border p-1 rounded shadow-lg"
+            onClick={() => {
+              signOut();
+            }}
+          >
+            SignOut
+          </button>
+        </div>
       </nav>
       <div className="mt-10 ">
         <div className="flex justify-between">

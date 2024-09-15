@@ -18,7 +18,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "toast": "^0.5.4",
-    "twilio": "^5.2.2",
+    "twilio": "^5.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

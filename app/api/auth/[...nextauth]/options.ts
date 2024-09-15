@@ -35,10 +35,8 @@ export const options: NextAuthOptions = {
           throw new Error("Complete data not provided");
         }
         const role = (credentials.role as string).toLowerCase();
-        // console.log(`after lowercase the role is ${role}`);
         const { phoneNumber, password } = credentials as CredentialsType;
         role1 = role;
-        // console.log("First role", role);
         const user: UserType =
           role === "admin"
             ? await prisma.healthConnect_Hospital.findFirst({
@@ -47,13 +45,9 @@ export const options: NextAuthOptions = {
             : await prisma.healthConnect_User.findFirst({
                 where: { phoneNumber },
               });
-        // console.log(user, "before !user logging user");
         if (!user) {
-          // console.log(user, "inside !user logging user");
-          // console.log("Inside (!user) condition ");
           throw new Error("Error While fetching data from server");
         }
-        // console.log("second role", role1);
         if (password != user.password) throw new Error("Incorrect Password");
         return user;
       },
@@ -63,14 +57,9 @@ export const options: NextAuthOptions = {
   callbacks: {
     async signIn({ user, credentials }) {
       const typedCredentials = credentials as CredentialsType | undefined;
-
-      // console.log("user from signIn callback ", user);
       if (typedCredentials != undefined) {
         const role = typedCredentials.role.toLowerCase();
-        // console.log("role from signIn callback ", role);
-
         if (role == "user" || role == "admin") {
-          // console.log(role, "typedCredentials role");
           return true;
         }
       }
@@ -78,7 +67,6 @@ export const options: NextAuthOptions = {
     },
     jwt({ token, user, session }) {
       const userInJWT = user as UserType;
-      // console.log("jwt callback ", { token, user, session });
       if (userInJWT) {
         return {
           ...token,
@@ -93,7 +81,6 @@ export const options: NextAuthOptions = {
       return token;
     },
     session({ session, token, user }) {
-      // console.log("session callback", { session, token, user });
       if (session) {
         return {
           ...session,

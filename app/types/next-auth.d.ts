@@ -8,6 +8,8 @@ declare module "next-auth" {
       id: string;
       role: string;
       address: string;
+      phoneNumber: string;
+      isVerified: boolean;
     } & DefaultSession["user"];
   }
 }
