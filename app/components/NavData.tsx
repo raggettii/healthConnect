@@ -2,7 +2,7 @@
 import Image from "next/image";
 import StatusBox from "./StatusBox";
 import { useState } from "react";
-import OtpVerifyModal from "./cancelAppointmentModal";
+import CancelAppointmentsModal from "./cancelAppointmentModal";
 import ConfigModal from "./ConfigModal";
 import { usePathname } from "next/navigation";
 
@@ -52,7 +52,7 @@ export default function NavData({
           <Image src={"/icons/circle.svg"} alt="corss" height={10} width={10} />
         </button>
         {isModalOpen && (
-          <OtpVerifyModal
+          <CancelAppointmentsModal
             closeModal={onClickHandler}
             label={"Cancel Appointment"}
             placeholder={""}

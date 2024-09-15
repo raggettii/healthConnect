@@ -22,7 +22,6 @@ export default function DashboardLayout({
   const [phoneNumberVerifiedLocally, setIsPhoneNumberVerifiedLocally] =
     useState(false);
   const isPhoneNumberVerified = sessionData.data?.user.isVerified;
-  console.log(isPhoneNumberVerified, "is phone number verified");
   useEffect(() => {
     function func() {
       if (isPhoneNumberVerified) {

@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { NextResponse } from "next/server";
 
-export default function OtpVerifyModal({
+export default function CancelAppointments({
   closeModal,
   label,
   placeholder,
   id,
-}: OtpVerifyModalType) {
+}: CancelAppointmentsType) {
   const router = useRouter();
   const prisma = new PrismaClient();
   const onClickHandler = async () => {
@@ -78,7 +78,7 @@ export default function OtpVerifyModal({
   );
 }
 
-type OtpVerifyModalType = {
+type CancelAppointmentsType = {
   closeModal: () => void;
   label: string;
   placeholder: string;

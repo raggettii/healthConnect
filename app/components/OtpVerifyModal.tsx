@@ -1,15 +1,10 @@
 "use client";
-import ButtonComponent from "./ButtonComponent";
 import InputBox from "./InputBox";
 import Image from "next/image";
-import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useReducer, useState } from "react";
-import { NextResponse } from "next/server";
-import { number } from "zod";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { Router } from "next/router";
 
 export default function OtpVerifyModal({
   closeModal,
