@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -20,7 +19,6 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
             </p>
           </Link>
         )}
-        <div>Hello</div>
       </div>
     </div>
   );
