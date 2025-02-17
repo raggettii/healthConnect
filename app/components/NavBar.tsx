@@ -22,8 +22,8 @@ export default function NavBar({
   }, [sessionData]);
 
   return (
-    <nav className="bg-[#0c4238] p-4">
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className="fixed top-0 w-full bg-[#0c4238] p-4">
+      <div className="container mx-auto flex justify-between items-center border-4 rounded-md shadow-md border-green-950 p-4">
         <div className="text-white text-2xl font-bold">HealthConnect</div>
         <div className="hidden md:flex space-x-4">
           {isLoggedIn ? (
