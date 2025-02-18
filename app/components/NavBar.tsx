@@ -37,11 +37,16 @@ export default function NavBar({
             </>
           ) : (
             <>
+              
               <Link href="/patient-signup">
-                <p className="text-white hover:text-gray-300">Signup</p>
+                <p className="text-white font-semibold hover:text-gray-300">
+                  Signup
+                </p>
               </Link>
               <Link href="/api/auth/signin">
-                <p className="text-white hover:text-gray-300">Signin</p>
+                <p className="text-white font-semibold hover:text-gray-300">
+                  Signin
+                </p>
               </Link>
             </>
           )}
