@@ -1,26 +1,90 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import Image from "next/image";
 import NavBar from "./components/NavBar";
 
 const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
-    <div className="bg-[#0c4238] text-white h-screen flex items-center justify-center">
-      <div className="text-center p-8">
-        <h1 className="text-5xl font-bold mb-4">Welcome to HealthConnect</h1>
-        <p className="text-xl mb-8">
-          Simplifying appointments between hospitals and doctors.
-        </p>
-        {!isLoggedIn && (
-          <Link href="/patient-signup">
-            <p className="bg-white text-[#0c4238] px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-200">
-              Get Started
-            </p>
-          </Link>
-        )}
+    <>
+      <div className="bg-[#0c4238] text-white h-screen flex items-center justify-center">
+        <div className="text-center p-8">
+          <h1 className="text-5xl font-bold mb-4">Welcome to HealthConnect</h1>
+          <p className="text-xl mb-8">
+            Simplifying appointments between hospitals and doctors.
+          </p>
+          {!isLoggedIn && (
+            <Link href="/patient-signup">
+              <p className="bg-white text-[#0c4238] px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-200">
+                Get Started
+              </p>
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
+
+      <section id="features" className="py-16 bg-[#0c4238] text-center">
+        <h3 className="text-3xl font-semibold text-white m-3 ">
+          Tired of Searching & Scheduling Appointments?
+        </h3>
+        <p>
+          We make it <span className="font-bold">easy & hassle-free</span> to
+          find hospitals and book appointments{" "}
+          <span className="font-bold">near you</span>.
+        </p>
+        <div className="flex justify-between">
+          <div className="flex flex-col items-start">
+            <div className=" font-bold text-xl p-4 text-white">
+              Easy Appointment Scheduling
+            </div>
+            <Image
+              className="rounded-md shadow-xl border-white border-2 ml-4"
+              src={"/assets/schedule.png"}
+              height={300}
+              width={600}
+              alt="schedule_image"
+            />
+          </div>
+          <div className="flex flex-col items-end">
+            <div className=" font-bold text-xl p-4 text-white">
+              Ensures Valid users
+            </div>
+            <Image
+              className="rounded-md shadow-xl border-white border-2 mr-4"
+              src={"/assets/phone_verify.png"}
+              height={300}
+              width={300}
+              alt="phone_verify_image"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className=" font-bold text-xl p-4 text-white">
+            Interactive Dashboard
+          </div>
+          <Image
+            className="rounded-md shadow-xl border-white border-2 mr-4"
+            src={"/assets/appointments.png"}
+            height={300}
+            width={1000}
+            alt="appointments_image"
+          />
+        </div>
+      </section>
+      <footer className="py-6 text-center bg-[#0f5448]">
+        <p className="text-white">
+          &copy; {new Date().getFullYear()} MyApp. All rights reserved.
+        </p>
+        <div className="mt-2 space-x-4">
+          <Link href="/privacy" className="text-blue-600 hover:underline">
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className="text-blue-600 hover:underline">
+            Terms of Service
+          </Link>
+        </div>
+      </footer>
+    </>
   );
 };
 
@@ -100,12 +164,12 @@ const HomePage = () => {
               ) : (
                 <>
                   <Link href="/patient-signup">
-                    <p className="text-white hover:text-gray-300 text-center">
+                    <p className="text-white font-semibold hover:text-gray-300 text-center">
                       Signup
                     </p>
                   </Link>
                   <Link href="/api/auth/signin">
-                    <p className="text-white hover:text-gray-300 text-center">
+                    <p className="text-white font-semibold hover:text-gray-300 text-center">
                       Signin
                     </p>
                   </Link>
