@@ -45,7 +45,8 @@ export default function DashboardLayout({
   const pathName = usePathname();
   const newPathName = pathName.split("/");
   const firstName = sessionData?.user?.name;
-  const availableCity: Array<string> = sessionData?.user?.cities;
+  const availableCity: Array<string> = sessionData?.user
+    ?.cities as Array<string>;
   const [phoneNumberVerifiedLocally, setIsPhoneNumberVerifiedLocally] =
     useState(false);
   const isPhoneNumberVerified = sessionData?.user.isVerified;

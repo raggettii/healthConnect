@@ -10,6 +10,8 @@ declare module "next-auth" {
       address: string;
       phoneNumber: string;
       isVerified: boolean;
+      cities: Array<string>;
+      tempCity: string;
     } & DefaultSession["user"];
   }
 }
