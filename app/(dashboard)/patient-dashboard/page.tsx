@@ -77,9 +77,10 @@ export default async function PatientDashboard() {
       doctor: "Dr singh",
     },
   ];
+
   return (
     <>
-      <div className="max-h-full min-h-[678px]">
+      <div className="min-h-screen max-h-fit">
         <div className="flex  justify-end mr-3 lg:mr-8">
           <BookAppointment text={"+ Book New Appointment"} />
         </div>
@@ -89,7 +90,7 @@ export default async function PatientDashboard() {
               <div key={index}>{item}</div>
             ))}
           </ul>
-          <div className=" flex flex-col gap-4 mt-4  ">
+          <div className=" flex flex-col gap-4 mt-4 ">
             {appointmentsData[0] ? (
               appointmentsData.map(
                 ({

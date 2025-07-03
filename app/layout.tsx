@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className}h-auto  bg-[#0c4238]`}>
+      <body className={`${inter.className}  bg-[#0c4238]`}>
         <Providers>{children}</Providers>
         <Toaster position="top-right" />
       </body>

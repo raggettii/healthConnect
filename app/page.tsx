@@ -22,7 +22,6 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           )}
         </div>
       </div>
-
       <section id="features" className="py-16 bg-[#0c4238] text-center">
         <h3 className="text-3xl font-semibold text-white m-3 ">
           Tired of Searching & Scheduling Appointments?
@@ -32,11 +31,10 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           find hospitals and book appointments{" "}
           <span className="font-bold">near you</span>.
         </p>
-        <div className="flex justify-between">
-          <div className="flex flex-col items-start">
-            <div className=" font-bold text-xl p-4 text-white">
-              Easy Appointment Scheduling
-            </div>
+        <div className="flex justify-center">
+          {/* <div className="flex flex-col items-start"> */}
+          <div className=" font-bold text-xl p-4 text-white">
+            Easy Appointment Scheduling
             <Image
               className="rounded-md shadow-xl border-white border-2 ml-4"
               src={"/assets/schedule.png"}
@@ -45,7 +43,8 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               alt="schedule_image"
             />
           </div>
-          <div className="flex flex-col items-end">
+          {/* </div> */}
+          {/* <div className="flex flex-col items-end">
             <div className=" font-bold text-xl p-4 text-white">
               Ensures Valid users
             </div>
@@ -56,7 +55,7 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               width={300}
               alt="phone_verify_image"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col items-center">
           <div className=" font-bold text-xl p-4 text-white">
@@ -71,18 +70,116 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           />
         </div>
       </section>
+      <section id="payments" className="py-16  text-center">
+        <div className="max-w-6xl mx-auto px-4">
+          <h3 className="text-3xl font-semibold text-[#0c4238] mb-8">
+            Safe & Secure Payments via PhonePe
+          </h3>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+            {/* PhonePe Payment Illustration */}
+            <div className="flex-1">
+              <Image
+                src="/assets/phone.png" // Add this image to your public/assets
+                alt="PhonePe Payment"
+                width={250}
+                height={300}
+                className="rounded-lg shadow-lg"
+              />
+            </div>
+
+            {/* Payment Features */}
+            <div className="flex-1 text-left">
+              <div className="bg-[#f8f9fa] p-6 rounded-lg">
+                <h4 className="text-xl font-semibold text-[#0c4238] mb-4">
+                  Why Choose PhonePe?
+                </h4>
+
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start">
+                    <div className="bg-[#0c4238] text-white p-1 rounded-full mr-3">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <span>Industry-leading security with UPI payments</span>
+                  </li>
+
+                  <li className="flex items-start">
+                    <div className="bg-[#0c4238] text-white p-1 rounded-full mr-3">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <span>Instant payment confirmation for appointments</span>
+                  </li>
+
+                  <li className="flex items-start">
+                    <div className="bg-[#0c4238] text-white p-1 rounded-full mr-3">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <span>No sensitive payment data stored on our servers</span>
+                  </li>
+                </ul>
+
+                <div className="mt-6">
+                  <Image
+                    src="/icons/PhonePe_Logo.svg" // Add PhonePe logo
+                    alt="PhonePe"
+                    width={150}
+                    height={50}
+                    className="mx-auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <footer className="py-6 text-center bg-[#0f5448]">
         <p className="text-white">
-          &copy; {new Date().getFullYear()} MyApp. All rights reserved.
+          &copy; {new Date().getFullYear()} HealthConnect
         </p>
-        <div className="mt-2 space-x-4">
+        {/* <div className="mt-2 space-x-4">
           <Link href="/privacy" className="text-blue-600 hover:underline">
             Privacy Policy
           </Link>
           <Link href="/terms" className="text-blue-600 hover:underline">
             Terms of Service
           </Link>
-        </div>
+        </div> */}
       </footer>
     </>
   );

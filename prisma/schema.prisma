@@ -59,11 +59,21 @@ model  HealthConnect_Appointment {
   hospital HealthConnect_Hospital @relation(fields: [hospitalId] , references: [id])
   hospitalId String
   status HEALTHCONNECT_STATUS @default(PENDING)
+  paymentStatus PAYMENT_STATUS @default(PENDING)
+  transactionId String? 
+  paymentVerifiedAt DateTime?
 }
 // update and cancelled status will work as 
 // when update status button clicked from 
 // fe just search for the same appointment and 
 // dot karke status par jaake usko update kar denge 
+
+enum PAYMENT_STATUS {
+  PENDING
+  SUCCESSFULL
+  FAILED
+}
+
 enum HEALTHCONNECT_STATUS {
   SCHEDULED
   PENDING

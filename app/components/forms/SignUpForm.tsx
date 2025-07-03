@@ -3,13 +3,12 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import useDebounce from "@/app/functions/debounce";
 import { signupSchema } from "@/app/zod";
 import React, { ChangeEvent, useState, useCallback } from "react";
 import Heading from "../Heading";
 import SubHeading from "../SubHeading";
 import InputBox from "../InputBox";
-import validateField from "@/app/functions/validateField";
+import validateField from "@/app/lib/validateField";
 import axios from "axios";
 import { NextResponse } from "next/server";
 
@@ -71,7 +70,7 @@ export default function SignUpForm({
       });
       setIsSubmitting(false);
       setErrors(fieldErrors);
-      toast.error("Please fix the errors before submitting");
+      // toast.error("Please fix the errors before submitting");
       return;
     }
 

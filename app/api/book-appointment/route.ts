@@ -24,6 +24,13 @@ export async function POST(req: NextRequest) {
     status: HEALTHCONNECT_STATUS;
     time: string;
   } = await req.json();
+  const userExists = await prisma.healthConnect_User.findUnique({
+    where: { id: userId },
+  });
+
+  if (!userExists) {
+    throw new Error("User not found");
+  }
   try {
     const response = await prisma.healthConnect_Appointment.create({
       data: {
@@ -45,6 +52,7 @@ export async function POST(req: NextRequest) {
     // console.log(response, "api response after book appointment");
     return NextResponse.json({
       msg: `Appointment added successfully ${response}`,
+      appointmentId: response.id,
     });
   } catch (error) {
     console.error(`Error while booking appointment ${error}`);

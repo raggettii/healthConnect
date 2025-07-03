@@ -1,30 +1,33 @@
 "use client";
 import toast from "react-hot-toast";
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent } from "react";
 import { scheduleAppointment } from "../zod";
 import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import SubHeading from "./SubHeading";
 import Image from "next/image";
-import validateField from "../functions/validateField";
+import validateField from "../lib/validateField";
 import { useSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 import Link from "next/link";
+import { useCookies } from "next-client-cookies";
 
 export default function AppointmentBookingModal({
   onClickHandler,
 }: {
   onClickHandler: () => void;
 }) {
+  const { data: sessionData } = useSession();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const session = useSession();
   const userId = session.data?.user.id;
+  console.log(userId, "USERRRRRRRRRRRRRRRR IDDDDDDDDDDDDD");
   const [doctorId, setDoctorId] = useState("");
-  const [specialization, setSpecialization] = useState(""); // Added state for specialization
+  const [specialization, setSpecialization] = useState("");
 
   const router = useRouter();
   const [hospitalId, setHospitalId] = useState<string>("");
@@ -35,17 +38,50 @@ export default function AppointmentBookingModal({
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
+  // const searchParams = useSearchParams();
+
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const Cookies = useCookies();
+
+  // useEffect(() => {
+  //   console.log("useEffect running on mount.");
+  //   console.log("document.cookie:", document.cookie); // See raw cookies
+
+  //   const message = Cookies.get("toast_message"); // Or use the hook's get
+  //   console.log("toast_message cookie:", message);
+
+  //   if (message) {
+  //     toast.success(message);
+  //     Cookies.remove("toast_message");
+  //     console.log("Toast shown and cookie removed.");
+  //   } else {
+  //     console.log("No toast_message cookie found.");
+  //   }
+  // }, []);
+
   useEffect(() => {
     const hospitalsData = async () => {
       try {
         const response = await axios.get("/api/hospitals");
+        console.log(response, "RESPONSEEEEEEEEEEEEE");
         setHospitalArray(response.data);
       } catch (error) {
-        console.error(`Error while fetching hospitals data ${error}`);
-        return NextResponse.json(
-          { error: "Error while fetching hospitals data" },
-          { status: 500 }
-        );
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 400) {
+            if (error.response.data.error === "Please select your City") {
+              toast.error("Please select your City");
+            } else {
+              toast.error(error.response.data.error || "An error occurred");
+            }
+          } else {
+            toast.error("Error while fetching hospitals data");
+            console.error("Error fetching hospitals:", error);
+          }
+        } else {
+          toast.error("An unexpected error occurred");
+          console.error("Unexpected error:", error);
+        }
       }
     };
     hospitalsData();
@@ -71,10 +107,6 @@ export default function AppointmentBookingModal({
   }, [hospitalId, specialization]);
 
   const hospitalsNamesArray = hospitalsArray.map(({ fullName }) => fullName);
-  // console.log(
-  //   doctorsArray,
-  //   "logging fetched doctor data in appointment booking modal "
-  // );
   const doctorsNameArray = doctorsArray.map(({ name }) => name);
 
   const dropdownContent = [
@@ -110,15 +142,10 @@ export default function AppointmentBookingModal({
     }
   }, [doctorName, doctorsArray]);
 
-  const onSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handlePayment = async (e: any) => {
+    e.preventDefault();
     setIsSubmitting(true);
-    // if (!isPhoneNumberVerified) {
-    //   toast.error(`Phone Number not Verified`);
-    //   // toast.apply()
-    //   setIsSubmitting(false);
-    //   return;
-    // }
+
     const result = scheduleAppointment.safeParse({
       hospitalId,
       specialization,
@@ -126,53 +153,48 @@ export default function AppointmentBookingModal({
       userId,
       date,
       status: "PENDING",
+      paymentStatus: "PENDING",
       time,
     });
-
-    // console.log("result after zod validation of appointment", result);
 
     if (!result.success) {
       result.error.errors.forEach((error) => {
         toast.error(error.message);
       });
       setIsSubmitting(false);
-      toast.error("Please fix the errors before submitting");
       return;
     }
 
     try {
-      const response = await axios.post("/api/book-appointment", {
+      const appointmentResponse = await axios.post("/api/book-appointment", {
         hospitalId,
         specialization,
         doctorId,
         userId,
         date,
-        status: "PENDING",
         time,
+        status: "PENDING",
+        paymentStatus: "PENDING",
       });
-      // console.log(
-      //   "Data i want to print from appointment booking modal ",
-      //   hospitalId,
-      //   specialization,
-      //   doctorId,
-      //   userId,
-      //   date,
-      //   time
-      // );
-      if (response.status === 200) {
-        toast.success("Appointment Booked successfully");
-        router.refresh();
-        onClickHandler();
-        router.push("/patient-dashboard");
+      console.log(appointmentResponse);
+      console.log("AppointmentID", appointmentResponse.data.appointmentId);
+
+      const response = await axios.post("/api/order", {
+        name: sessionData?.user.name,
+        amount: 100,
+        phone: sessionData?.user.phoneNumber || "9876543210",
+        appointmentId: appointmentResponse.data.appointmentId,
+        transactionId: "T" + Date.now(),
+      });
+      if (
+        response.data &&
+        response.data.data.instrumentResponse.redirectInfo.url
+      ) {
+        window.location.href =
+          response.data.data.instrumentResponse.redirectInfo.url;
       }
-    } catch (error) {
-      toast.error("All fields are required");
-      console.error(`Error Occurred While Creating Appointment ${error}`);
-      return NextResponse.json(
-        { error: "Error Occurred While Creating Appointment" },
-        { status: 500 }
-      );
-    } finally {
+    } catch (e) {
+      toast.error("Payment initiation failed");
       setIsSubmitting(false);
     }
   };
@@ -264,7 +286,7 @@ export default function AppointmentBookingModal({
                 </div>
                 <div className="flex justify-center">
                   <button
-                    onClick={onSubmit}
+                    onClick={handlePayment}
                     disabled={isSubmitting}
                     type="submit"
                     className="disabled:bg-gray-400 disabled:hover:text-white text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] rounded-lg"
@@ -280,6 +302,7 @@ export default function AppointmentBookingModal({
     </>
   );
 }
+
 type hospitalDataType = {
   id: string;
   fullName: string;
@@ -288,6 +311,7 @@ type hospitalDataType = {
   phoneNumber: string;
   city: string;
 };
+
 type doctorDataType = {
   id: string;
   name: string;
