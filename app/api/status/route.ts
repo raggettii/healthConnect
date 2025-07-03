@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import axios from "axios";
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -38,7 +37,6 @@ export async function POST(req: any) {
     console.log(response);
     console.log("Inside status thingggg after status");
     if (response.data.success === true) {
-      // Update appointment status in database
       await prisma.healthConnect_Appointment.update({
         where: { id: appointmentId },
         data: {
@@ -72,7 +70,6 @@ export async function POST(req: any) {
     }
   } catch (error: any) {
     console.error(error);
-    // Return error response
     return NextResponse.json(
       { error: "Payment check failed", details: error.message },
       { status: 500 }

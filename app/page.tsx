@@ -32,7 +32,6 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           <span className="font-bold">near you</span>.
         </p>
         <div className="flex justify-center">
-          {/* <div className="flex flex-col items-start"> */}
           <div className=" font-bold text-xl p-4 text-white">
             Easy Appointment Scheduling
             <Image
@@ -43,19 +42,6 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
               alt="schedule_image"
             />
           </div>
-          {/* </div> */}
-          {/* <div className="flex flex-col items-end">
-            <div className=" font-bold text-xl p-4 text-white">
-              Ensures Valid users
-            </div>
-            <Image
-              className="rounded-md shadow-xl border-white border-2 mr-4"
-              src={"/assets/phone_verify.png"}
-              height={300}
-              width={300}
-              alt="phone_verify_image"
-            />
-          </div> */}
         </div>
         <div className="flex flex-col items-center">
           <div className=" font-bold text-xl p-4 text-white">
@@ -77,10 +63,9 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           </h3>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            {/* PhonePe Payment Illustration */}
             <div className="flex-1">
               <Image
-                src="/assets/phone.png" // Add this image to your public/assets
+                src="/assets/phone.png"
                 alt="PhonePe Payment"
                 width={250}
                 height={300}
@@ -156,7 +141,7 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 
                 <div className="mt-6">
                   <Image
-                    src="/icons/PhonePe_Logo.svg" // Add PhonePe logo
+                    src="/icons/PhonePe_Logo.svg"
                     alt="PhonePe"
                     width={150}
                     height={50}
@@ -172,14 +157,6 @@ const HeroSection = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
         <p className="text-white">
           &copy; {new Date().getFullYear()} HealthConnect
         </p>
-        {/* <div className="mt-2 space-x-4">
-          <Link href="/privacy" className="text-blue-600 hover:underline">
-            Privacy Policy
-          </Link>
-          <Link href="/terms" className="text-blue-600 hover:underline">
-            Terms of Service
-          </Link>
-        </div> */}
       </footer>
     </>
   );

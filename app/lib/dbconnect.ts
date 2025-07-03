@@ -13,7 +13,6 @@ export async function safeDbOperation<T>(
   } catch (error) {
     console.error("Database error:", error);
 
-    // Handle specific Prisma connection errors
     if (error instanceof Error && error.message.includes("connect")) {
       toast.error(
         "Failed to connect to database. Please check your internet connection."

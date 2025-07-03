@@ -1,5 +1,4 @@
 import SignUpForm from "@/app/components/forms/SignUpForm";
-// import PatientForm from "@/app/components/forms/PatientForm";
 export default function PatientAuth() {
   return (
     <>

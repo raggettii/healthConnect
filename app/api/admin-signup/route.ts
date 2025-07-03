@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 export async function POST(req: Request, res: Response) {
   const {
     password,
@@ -19,7 +19,6 @@ export async function POST(req: Request, res: Response) {
         password: password,
       },
     });
-    // console.log(`Hospital created successfully ${response}`);
     return NextResponse.json({
       response,
     });

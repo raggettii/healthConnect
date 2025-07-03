@@ -38,28 +38,6 @@ export default function AppointmentBookingModal({
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
-  // const searchParams = useSearchParams();
-
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const Cookies = useCookies();
-
-  // useEffect(() => {
-  //   console.log("useEffect running on mount.");
-  //   console.log("document.cookie:", document.cookie); // See raw cookies
-
-  //   const message = Cookies.get("toast_message"); // Or use the hook's get
-  //   console.log("toast_message cookie:", message);
-
-  //   if (message) {
-  //     toast.success(message);
-  //     Cookies.remove("toast_message");
-  //     console.log("Toast shown and cookie removed.");
-  //   } else {
-  //     console.log("No toast_message cookie found.");
-  //   }
-  // }, []);
-
   useEffect(() => {
     const hospitalsData = async () => {
       try {

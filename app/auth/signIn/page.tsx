@@ -16,10 +16,7 @@ export default function CustomSignIn() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    // console.log("Current form state:", form);
-    // console.log("Currently focused:", focusedField);
-  }, [form, focusedField]);
+  useEffect(() => {}, [form, focusedField]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -27,7 +24,6 @@ export default function CustomSignIn() {
     const { name, value } = e.target;
     setForm((prev) => {
       const newState = { ...prev, [name]: value };
-      // console.log(`Updating ${name} to:`, value);
       return newState;
     });
   };
@@ -36,7 +32,6 @@ export default function CustomSignIn() {
     e.preventDefault();
 
     const submissionData = { ...form };
-    // console.log("Submitting:", submissionData);
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -71,9 +66,7 @@ export default function CustomSignIn() {
           </Link>
           <h2 className="text-2xl font-bold text-center mb-4">Sign In</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Your existing form fields */}
             <div>
-              {/* <Link href={"/user-signup"}>SignUp</Link> */}
               <label className="block mb-1 text-sm font-medium text-gray-300">
                 Role
               </label>
@@ -126,7 +119,6 @@ export default function CustomSignIn() {
               Sign In
             </button>
 
-            {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
@@ -138,7 +130,6 @@ export default function CustomSignIn() {
               </div>
             </div>
 
-            {/* Google Sign-In Button */}
             <button
               onClick={handleGoogleSignIn}
               type="button"

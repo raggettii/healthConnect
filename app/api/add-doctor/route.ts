@@ -10,17 +10,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }: { specialization: HEALTHCONNECT_SPECIALIZATION; name: string } =
     await req.json();
   const tokenData = await getServerSession(options);
-  // console.log(tokenData, "Token data form add doctor");
   const id = tokenData?.user.id;
   if (name.length == 0) {
     throw Error;
   }
-  // console.log(
-  //   specialization,
-  //   name,
-  //   id,
-  //   "Data entered for adding doctorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
-  // );
   try {
     const addDoctor = await prisma.healthConnect_Doctor.create({
       data: {
@@ -42,8 +35,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
       { error: "Error occurred while adding doctor" },
       { status: 500 }
     );
-    // return NextResponse.json({
-    //   error,
-    // });
   }
 }

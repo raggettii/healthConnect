@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
 import {
   PrismaClient,
   HEALTHCONNECT_SPECIALIZATION,
@@ -49,7 +48,6 @@ export async function POST(req: NextRequest) {
         status,
       },
     });
-    // console.log(response, "api response after book appointment");
     return NextResponse.json({
       msg: `Appointment added successfully ${response}`,
       appointmentId: response.id,

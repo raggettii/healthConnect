@@ -1,9 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import Link from "next/link";
-import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
-const secret = process.env.NEXT_AUTH_SECRET;
 export default function NavBar({
   isLoggedIn,
   setIsLoggedIn,
@@ -37,7 +34,6 @@ export default function NavBar({
             </>
           ) : (
             <>
-              
               <Link href="/patient-signup">
                 <p className="text-white font-semibold hover:text-gray-300">
                   Signup

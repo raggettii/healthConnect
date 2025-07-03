@@ -1,7 +1,6 @@
 import AddDoctorButton from "@/app/components/AddDoctorButton";
 import NavData from "@/app/components/NavData";
 import Nodata from "@/app/components/Nodata";
-import axios from "axios";
 import { getServerSession, Session } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { PrismaClient } from "@prisma/client";
@@ -10,9 +9,7 @@ export default async function AdminDashboard() {
   const prisma = new PrismaClient();
   const navData = ["Patient ", "Doctor", "Date", "Time", "Status", "confi."];
   const sessionData: Session | null = await getServerSession(options);
-  // console.log(sessionData, "Session data form adminDashboard");
   const hospitalId = sessionData?.user.id;
-  const newName = sessionData?.user.name;
   const appointments = await prisma.healthConnect_Appointment.findMany({
     where: {
       hospitalId: hospitalId,

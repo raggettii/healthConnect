@@ -2,9 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { options } from "../../auth/[...nextauth]/options";
 import twilio from "twilio";
-import toast from "react-hot-toast";
 import { PrismaClient } from "@prisma/client";
-import { cookies } from "next/headers";
 
 const accountSID = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -25,12 +23,6 @@ export async function POST(req: NextRequest) {
     if (!phoneNumber) {
       throw new Error();
     }
-    // const searchParams = req.nextUrl.searchParams;
-    // console.log("Here is the full url ", req.url);
-    // // const { searchParams } = new URL(req.url);
-    // console.log("Here aare sercfd params ", searchParams.getAll("otp"));
-    // const otp = searchParams.get("otp") as string;
-    // console.log("Hii otp aai kya ", otp);
 
     const twilioResponse = await client.verify.v2
       .services(serviceId)

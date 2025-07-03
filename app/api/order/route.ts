@@ -50,18 +50,11 @@ export async function POST(req: any) {
       },
     };
     console.log("Before optionsssssss");
-    // Await axios response
     const response = await axios(options);
     console.log("after optionsssssss");
-
-    // console.log(response.data);
-
-    // Return the response using NextResponse
     return NextResponse.json(response.data);
   } catch (error: any) {
     console.log(error);
-
-    // Return error response
     return NextResponse.json(
       { error: "Payment initiation failed", details: error.message },
       { status: 500 }

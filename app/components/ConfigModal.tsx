@@ -1,5 +1,4 @@
 import { ChangeEvent, useState } from "react";
-import ButtonComponent from "./ButtonComponent";
 import DropDown from "./DropDown";
 import InputBox from "./InputBox";
 import Image from "next/image";
@@ -39,17 +38,12 @@ export default function ConfigModal({
         selectedValue,
       });
       if (response) {
-        // console.log(
-        //   "HEYyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
-        //   response
-        // );
         toast.success("Status updated successfully ");
         setIsSubmitting(false);
         closeModal();
         router.refresh();
       }
     } catch (error) {
-      // console.log(`Error occured while updating status ${error}`);
       return NextResponse.json(
         { error: "Error occured while updating status" },
         { status: 500 }
@@ -66,16 +60,12 @@ export default function ConfigModal({
   const dropdownChange = (item: string) => {
     setSelectedValue(item);
   };
-  // console.log(selectedValue);
   const onClickHandler =
     (value: string) => (e: ChangeEvent<HTMLInputElement>) => {
       if (value === "description") setDescription(e.target.value);
       if (value === "date") setDate(e.target.value);
       if (value === "time") setTime(e.target.value);
     };
-  // console.log(date);
-  // console.log(time);
-  // console.log(description);
   return (
     <>
       <div
@@ -138,7 +128,6 @@ export default function ConfigModal({
               onChange={onClickHandler("time")}
             />
             <button
-              // onClick={onSubmit}
               type="submit"
               disabled={isSubmitting}
               className=" disabled:bg-gray-500 disabled:text-white text-center font-bold text-lg hover:text-green-800 p-2 mt-3 mb-3 text-white bg-green-400 w-[200px] ml-5 rounded-lg"
@@ -146,7 +135,6 @@ export default function ConfigModal({
               Submit
             </button>
           </form>
-          {/* Isi button k click par otp bhejne ka logic  */}
         </div>
       </div>
     </>

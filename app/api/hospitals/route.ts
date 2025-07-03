@@ -6,16 +6,15 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const prisma = new PrismaClient();
   const sessionData = await getServerSession(options);
-  // console.log("session Data heer erer", sessionData);
   const tempCity = sessionData?.user.tempCity;
   if (!tempCity || tempCity === "") {
     return NextResponse.json(
       {
         error: "Please select your City",
-        errorType: "CITY_NOT_SELECTED", // Add error type for easier client-side handling
+        errorType: "CITY_NOT_SELECTED",
       },
       {
-        status: 400, // Using 400 (Bad Request) for missing required data
+        status: 400,
         headers: {
           "Content-Type": "application/json",
         },
@@ -24,7 +23,6 @@ export async function GET() {
   }
 
   try {
-    // if (tempCity == "") throw new Error("Please select your City");
     const response = await prisma.healthConnect_Hospital.findMany({
       where: {
         city: tempCity,

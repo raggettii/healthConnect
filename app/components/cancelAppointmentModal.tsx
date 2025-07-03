@@ -1,11 +1,8 @@
 "use client";
-import ButtonComponent from "./ButtonComponent";
-import InputBox from "./InputBox";
 import Image from "next/image";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useReducer } from "react";
 import { NextResponse } from "next/server";
 
 export default function CancelAppointments({
@@ -18,7 +15,6 @@ export default function CancelAppointments({
   const prisma = new PrismaClient();
   const onClickHandler = async () => {
     try {
-      // console.log("hii from onClick inside deletion of ststua");
       const response = await axios.post("/api/delete-appointment", {
         appointmentId: id,
       });

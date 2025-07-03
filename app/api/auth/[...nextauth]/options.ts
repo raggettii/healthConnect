@@ -28,7 +28,6 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        // console.log("Inside authorise function");
         if (
           !credentials?.role ||
           !credentials?.phoneNumber ||
@@ -51,7 +50,6 @@ export const options: NextAuthOptions = {
           throw new Error("User not found");
         }
         if (password != user.password) throw new Error("Incorrect Password");
-        // console.log("Just above user return statemetn");
         return user;
       },
     }),
@@ -103,14 +101,10 @@ export const options: NextAuthOptions = {
       return false;
     },
     async jwt({ token, user, session, account, profile, trigger }) {
-      // console.log("Trigger:", trigger);
-      // console.log("Session data:", session);
-      // console.log("Current token:", token);
       if (trigger === "update" && session?.tempCity) {
         token.tempCity = session.tempCity;
         return token;
       }
-      // console.log("Outside if in jwt ");
       let availableCities: Array<string>;
       try {
         const res = await prisma.healthConnect_Hospital.findMany({
@@ -119,20 +113,12 @@ export const options: NextAuthOptions = {
           },
           distinct: ["city"],
         });
-        // console.log(res);
         availableCities = res.map((item) => item.city);
-        // console.log(availableCities);
       } catch (error) {
         console.error("Fetch error:", error);
         availableCities = [];
       }
       if (profile && account?.provider === "google") {
-        // const dbUser = await prisma.healthConnect_User.findUnique({
-        //   where: {
-        //     email: user.email as string,
-        //   },
-        // });
-        // console.log("inside google provider token setting function ");
         return {
           ...token,
           id: user.id,
@@ -143,13 +129,12 @@ export const options: NextAuthOptions = {
           isVerified: true,
           address: "",
           phoneNumber: "",
-          cities: availableCities, // Set here
+          cities: availableCities,
           tempCity: token.tempCity || "",
         };
       }
       const userInJWT = user as UserType;
       if (userInJWT) {
-        // console.log("inside userinJWT token setting function ");
         return {
           ...token,
           id: userInJWT.id,
@@ -162,7 +147,6 @@ export const options: NextAuthOptions = {
           tempCity: token.tempCity || userInJWT.city,
         };
       }
-      // console.log("token", token);
       return token;
     },
     async session({ session, token, user }) {
@@ -181,7 +165,6 @@ export const options: NextAuthOptions = {
           },
         };
       }
-      // console.log("session", session);
       return session;
     },
   },

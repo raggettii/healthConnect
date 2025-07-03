@@ -70,7 +70,6 @@ export default function SignUpForm({
       });
       setIsSubmitting(false);
       setErrors(fieldErrors);
-      // toast.error("Please fix the errors before submitting");
       return;
     }
 
