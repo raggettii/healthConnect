@@ -86,7 +86,7 @@ export const options: NextAuthOptions = {
             email: profile.email,
             fullName: profile.name as string,
             city: "",
-            phoneNumber: "",
+            // phoneNumber: "",
             password: "",
           },
           update: {
@@ -174,7 +174,7 @@ type UserType = {
   fullName: string;
   email: string;
   password: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   city: string;
   isVerified: boolean;
 } | null;
